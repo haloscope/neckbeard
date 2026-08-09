@@ -24,7 +24,7 @@ H1_RE = re.compile(r"^#\s+(.*)$", re.M)
 
 
 def parse(path: Path):
-    lines = path.read_text().splitlines()
+    lines = path.read_text(encoding="utf-8").splitlines()
     if not lines or lines[0].strip() != "---":
         return None, ""
     for j in range(1, len(lines)):
@@ -127,14 +127,14 @@ def main() -> int:
     content = render(root)
     status = root / "STATUS.md"
     if check:
-        current = status.read_text() if status.is_file() else ""
+        current = status.read_text(encoding="utf-8") if status.is_file() else ""
         if current != content:
             print("gen_status --check: STATUS.md is stale — "
                   "run scripts/gen_status.py and commit the result")
             return 1
         print("gen_status --check: STATUS.md is current")
         return 0
-    status.write_text(content)
+    status.write_text(content, encoding="utf-8", newline="\n")
     print(f"wrote {status}")
     return 0
 

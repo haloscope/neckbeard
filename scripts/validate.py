@@ -169,7 +169,7 @@ def apply_rules(path: Path, rel: str, meta: dict, spec: dict) -> None:
 
 def main() -> int:
     root = Path(sys.argv[1]) if len(sys.argv) > 1 else Path.cwd()
-    schema = yaml.safe_load((root / "schema.yaml").read_text())
+    schema = yaml.safe_load((root / "schema.yaml").read_text(encoding="utf-8"))
     link_fields = schema.get("link_fields", [])
     types = schema.get("types", {})
     inbound: set = set()
@@ -180,7 +180,7 @@ def main() -> int:
         path = root / rel
         if not path.is_file():
             continue  # e.g. STATUS.md before first generation
-        text = path.read_text()
+        text = path.read_text(encoding="utf-8")
         _meta, body = parse_frontmatter(text)
         check_body_links(path, body if _meta is not None else text,
                          root, inbound)
@@ -189,7 +189,7 @@ def main() -> int:
 
     for path in artifacts:
         rel = path.relative_to(root).as_posix()
-        meta, body = parse_frontmatter(path.read_text())
+        meta, body = parse_frontmatter(path.read_text(encoding="utf-8"))
         if meta is None:
             err(path, "missing or unterminated YAML frontmatter")
             continue
@@ -235,9 +235,9 @@ def main() -> int:
         for path in sorted(root.glob(pattern)):
             if not path.is_file() or path.resolve() in already:
                 continue
-            meta, body = parse_frontmatter(path.read_text())
+            meta, body = parse_frontmatter(path.read_text(encoding="utf-8"))
             if meta is None:
-                body = path.read_text()
+                body = path.read_text(encoding="utf-8")
             check_body_links(path, body, root, inbound)
 
     for path, _meta in wiki_pages:

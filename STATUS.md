@@ -14,7 +14,7 @@
 
 _none active_
 
-## ADRs (4)
+## ADRs (5)
 
 | ADR | Status | Title |
 |---|---|---|
@@ -22,6 +22,7 @@ _none active_
 | [0002](docs/adr/0002-in-repo-issues.md) | accepted | ADR-0002: Issues live in the repo as Markdown files |
 | [0003](docs/adr/0003-portable-markdown.md) | accepted | ADR-0003: Portable Markdown — standard links, YAML frontmatter, Mermaid |
 | [0004](docs/adr/0004-schema-first-validation.md) | accepted | ADR-0004: Schema-first validation, ontology-ready in stages |
+| [0005](docs/adr/0005-mit-license.md) | accepted | ADR-0005: Neckbeard is MIT-licensed |
 
 ## Open AARs (0)
 

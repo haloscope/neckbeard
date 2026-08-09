@@ -118,4 +118,4 @@ agents, plus ideas deliberately taken (and credited) from:
 The reasoning is recorded where this framework says reasoning belongs:
 in its own ADRs. Start with `docs/adr/0001` (canonical AGENTS.md),
 `0002` (in-repo issues), `0003` (portable Markdown), and `0004`
-(schema-first validation and its growth stages).
+(schema-first validation and its growth stages), and `0005` (MIT license).

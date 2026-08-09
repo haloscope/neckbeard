@@ -1,4 +1,6 @@
-<img src="assets/logo.png" alt="neckbeard" width="120" align="right"/>
+<p align="center">
+  <img src="assets/logo.png" alt="neckbeard" width="220"/>
+</p>
 
 # Neckbeard
 

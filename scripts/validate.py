@@ -29,6 +29,7 @@ except ImportError:  # pragma: no cover
 
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 INLINE_LINK_RE = re.compile(r"\]\(([^)\s]+)\)")
+HTML_SRC_RE = re.compile(r"(?:src|srcset)=\"([^\"]+)\"")
 EXTERNAL_PREFIXES = ("http://", "https://", "mailto:")
 
 errors: list[str] = []
@@ -137,8 +138,12 @@ def check_body_links(path: Path, body: str, root: Path, inbound: set) -> None:
     # samples, and literal link examples in backticks aren't scanned
     body = re.sub(r"```.*?```", "", body, flags=re.S)
     body = re.sub(r"`[^`\n]*`", "", body)
-    for match in INLINE_LINK_RE.finditer(body):
-        link = match.group(1)
+    candidates = [m.group(1) for m in INLINE_LINK_RE.finditer(body)]
+    for raw in (m.group(1) for m in HTML_SRC_RE.finditer(body)):
+        # srcset may list "path 2x, path2 1x" pairs — take each path token
+        for part in raw.split(","):
+            candidates.append(part.strip().split()[0])
+    for link in candidates:
         if link.startswith(EXTERNAL_PREFIXES) or link.startswith("#"):
             continue
         link = link.split("#", 1)[0]
@@ -146,7 +151,7 @@ def check_body_links(path: Path, body: str, root: Path, inbound: set) -> None:
             continue
         target = (path.parent / link).resolve()
         if not target.is_file():
-            err(path, f"inline link target missing: {match.group(1)}")
+            err(path, f"inline link target missing: {link}")
         else:
             inbound.add(target)
 

@@ -1,4 +1,9 @@
-<img src="assets/logo.png" alt="neckbeard" width="120" align="right"/>
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/logo-dark.png">
+    <img src="assets/logo.png" alt="neckbeard" width="220"/>
+  </picture>
+</p>
 
 # Neckbeard
 

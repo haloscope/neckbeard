@@ -1,0 +1,9 @@
+# Deterministic gates: schema validation + STATUS freshness (ADR-0004).
+validate:
+  image: python:3.12-slim
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"'
+  script:
+    - pip install --quiet pyyaml
+    - python scripts/validate.py
+    - python scripts/gen_status.py --check

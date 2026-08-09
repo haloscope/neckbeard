@@ -1,0 +1,114 @@
+# schema.yaml — single source of truth for artifact frontmatter.
+# Stage 1 of ADR-0004: scripts/validate.py checks generically against this
+# file. Extending the framework's metadata means editing THIS file, not code.
+# Agents: never invent fields or status values; propose a schema change.
+
+version: 1
+
+scope:
+  # Files considered artifacts. Templates and raw sources are exempt.
+  include:
+    - "PROJECT.md"
+    - "docs/**/*.md"
+  exclude:
+    - "**/template.md"
+    - "docs/sources/**"
+    - "vendor/**"
+  # Root documents: no frontmatter required, but their inline links
+  # must resolve — checked on every validate run.
+  link_only:
+    - "README.md"
+    - "AGENTS.md"
+    - "WORKFLOW.md"
+    - "STATUS.md"
+    - "CLAUDE.md"
+  # Files whose inline links are checked, but which need no frontmatter
+  # (root-level prose: README, AGENTS, WORKFLOW, generated STATUS, ...).
+  link_only:
+    - "*.md"
+
+# Frontmatter fields whose values are links. Values starting with
+# http://, https:// or mailto: are treated as external and only
+# format-checked; everything else must be a repo-root-relative path
+# to an existing file.
+link_fields: [related, sources, supersedes, superseded_by]
+
+types:
+  project:
+    dir: "."
+    filename: "^PROJECT\\.md$"
+    required: [type, language, size_s_exception, purpose, audience]
+    fields:
+      language: { enum: [de, en] }
+      size_s_exception: { kind: bool }
+      purpose: { kind: str }
+      audience: { kind: str }
+
+  adr:
+    dir: "docs/adr"
+    filename: "^\\d{4}-[a-z0-9-]+\\.md$"
+    required: [type, id, status, date]
+    fields:
+      id: { pattern: "^\\d{4}$" }
+      status: { enum: [proposed, accepted, superseded] }
+      date: { kind: date }
+      supersedes: { kind: link, nullable: true }
+      superseded_by: { kind: link, nullable: true }
+      related: { kind: links }
+    rules:
+      # status: superseded requires superseded_by to point at the successor.
+      - superseded_requires_pointer
+
+  design:
+    dir: "docs/design"
+    filename: "^\\d{4}-\\d{2}-\\d{2}-[a-z0-9-]+\\.md$"
+    required: [type, status, date, size]
+    fields:
+      status: { enum: [gate-1, gate-2, gate-3, gate-4, gate-5, done] }
+      size: { enum: [L] }
+      date: { kind: date }
+      related: { kind: links }
+    rules:
+      # status: done if and only if the file lives under docs/design/done/.
+      - done_iff_in_done_dir
+
+  aar:
+    dir: "docs/aar"
+    filename: "^\\d{4}-\\d{2}-\\d{2}-[a-z0-9-]+\\.md$"
+    required: [type, status, date]
+    fields:
+      status: { enum: [open, harvested] }
+      date: { kind: date }
+      related: { kind: links }
+
+  issue:
+    dir: "docs/issues"
+    filename: "^\\d{4}-[a-z0-9-]+\\.md$"
+    required: [type, id, status, created]
+    fields:
+      id: { pattern: "^\\d{4}$" }
+      status: { enum: [open, in-progress, done, rejected] }
+      created: { kind: date }
+      related: { kind: links }
+
+  wiki-page:
+    dir: "docs/wiki"
+    filename: "^[a-z0-9-]+\\.md$"
+    required: [type, area]
+    fields:
+      area:
+        enum:
+          - index
+          - architecture
+          - admin
+          - deployment
+          - user-guide
+          - requirements
+          - faq
+          - stolpersteine
+      sources: { kind: links }
+      related: { kind: links }
+    rules:
+      # Pages other than the index should be linked from somewhere
+      # (reported as WARNING, not error — see validate.py).
+      - warn_if_orphan

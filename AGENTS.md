@@ -30,6 +30,10 @@ use judgment — but say so.
 - Never cut, at any rung: trust-boundary validation, data-loss handling,
   security, accessibility.
 - Lazy about the solution, never about reading the code first.
+- This branch vendors the full ponytail ruleset and skills at
+  `vendor/ponytail/` (see `vendor/ponytail/VENDORED.md`). Read
+  `vendor/ponytail/AGENTS.md` once per session — it details the ladder
+  above. On conflicts, this file wins.
 
 ### Surgical changes
 - Touch only what you must. Match existing style, even if you'd differ.

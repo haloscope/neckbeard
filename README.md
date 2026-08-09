@@ -67,6 +67,14 @@ gates, lasting decisions become ADRs, learnings become AARs, and AARs
 are harvested into the wiki — with original sources preserved and
 cited. `STATUS.md` is generated from frontmatter; never edit it by hand.
 
+## This branch: vendored ponytail
+
+`main` expects [ponytail](https://github.com/DietrichGebert/ponytail)
+as a marketplace plugin. This branch instead carries its instruction-only
+ruleset, skills and commands under [vendor/ponytail/](vendor/ponytail/VENDORED.md)
+(MIT, notice included) — for air-gapped or locked-down environments
+without marketplace access. Refresh via `scripts/vendor-ponytail.sh`.
+
 ## Adopting this in a new project
 
 1. Copy everything **except** `PROJECT.md` into the new repo

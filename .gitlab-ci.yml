@@ -7,3 +7,34 @@ validate:
     - pip install --quiet pyyaml
     - python scripts/validate.py
     - python scripts/gen_status.py --check
+
+# Manual vendor refresh for the with-ponytail branch.
+# Appears as a play button only in pipelines of that branch.
+# Requires CI/CD variable VENDOR_PUSH_TOKEN: a project access token
+# with scope write_repository (masked). Opens an MR — never pushes
+# to with-ponytail directly; the diff gets reviewed like any change.
+vendor-update:
+  image: python:3.12-slim
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "with-ponytail"'
+      when: manual
+  script:
+    - test -n "$VENDOR_PUSH_TOKEN" || { echo "Set CI/CD variable VENDOR_PUSH_TOKEN (project access token, write_repository)"; exit 1; }
+    - apt-get update -qq && apt-get install -qq -y --no-install-recommends git ca-certificates >/dev/null
+    - pip install --quiet pyyaml
+    - git config user.name "neckbeard-vendor-bot"
+    - git config user.email "vendor-bot@invalid"
+    - bash scripts/vendor-ponytail.sh
+    - if [ -z "$(git status --porcelain)" ]; then echo "vendor already up to date"; exit 0; fi
+    - python scripts/validate.py
+    - HASH=$(grep '^- Commit:' vendor/ponytail/VENDORED.md | awk '{print $3}' | cut -c1-8)
+    - BR="vendor/ponytail-update-${HASH}"
+    - git checkout -b "$BR"
+    - git add -A
+    - git commit -m "vendor: update ponytail to ${HASH}"
+    - git push "https://oauth2:${VENDOR_PUSH_TOKEN}@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git"
+        "HEAD:refs/heads/${BR}"
+        -o merge_request.create
+        -o merge_request.target=with-ponytail
+        -o merge_request.title="vendor: update ponytail to ${HASH}"
+        -o merge_request.remove_source_branch

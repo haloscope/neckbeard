@@ -14,14 +14,6 @@ scope:
     - "**/template.md"
     - "docs/sources/**"
     - "vendor/**"
-  # Root documents: no frontmatter required, but their inline links
-  # must resolve — checked on every validate run.
-  link_only:
-    - "README.md"
-    - "AGENTS.md"
-    - "WORKFLOW.md"
-    - "STATUS.md"
-    - "CLAUDE.md"
   # Files whose inline links are checked, but which need no frontmatter
   # (root-level prose: README, AGENTS, WORKFLOW, generated STATUS, ...).
   link_only:

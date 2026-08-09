@@ -38,3 +38,25 @@ vendor-update:
         -o merge_request.target=with-ponytail
         -o merge_request.title="vendor: update ponytail to ${HASH}"
         -o merge_request.remove_source_branch
+
+# Manual, branch-scoped: refresh the vendored ponytail subset.
+# Needs a masked CI/CD variable VENDOR_PUSH_TOKEN (project access token,
+# scope: write_repository) and runner egress to github.com.
+vendor-update:
+  image: alpine:3.20
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "with-ponytail"'
+      when: manual
+  script:
+    - apk add --no-cache git bash
+    - git config user.name "vendor-bot"
+    - git config user.email "vendor-bot@${CI_SERVER_HOST}"
+    - bash scripts/vendor-ponytail.sh
+    - git add -A vendor/
+    - |
+      if git diff --cached --quiet; then
+        echo "vendor: already up to date"; exit 0
+      fi
+    - git commit -m "vendor: refresh ponytail"
+    - git push "https://oauth2:${VENDOR_PUSH_TOKEN}@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git" HEAD:with-ponytail
+    - echo "pushed — review the commit diff in GitLab"

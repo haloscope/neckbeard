@@ -1,7 +1,7 @@
 ---
 type: issue
 id: "0006"
-status: open
+status: done
 created: 2026-08-13
 related:
   - "docs/sources/feldtest-first-adoption-2026-08.md"
@@ -18,3 +18,5 @@ fixed. Upstream has no such rule. Candidate sentence for AGENTS.md
 operating rules.
 
 *Evidence: [field-test hand-back](../../docs/sources/feldtest-first-adoption-2026-08.md), item 10.*
+
+**Closed 2026-08-13 (v0.1.2):** rule added to AGENTS.md §1 (Exceptions need decisions).

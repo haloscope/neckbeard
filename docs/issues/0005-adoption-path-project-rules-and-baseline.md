@@ -1,7 +1,7 @@
 ---
 type: issue
 id: "0005"
-status: open
+status: done
 created: 2026-08-13
 related:
   - "docs/sources/feldtest-first-adoption-2026-08.md"
@@ -21,3 +21,5 @@ into README adoption path and templates. Reference:
 the adopter's drift check and provenance note.
 
 *Evidence: [field-test hand-back](../../docs/sources/feldtest-first-adoption-2026-08.md), item 9.*
+
+**Closed 2026-08-13 (v0.1.2):** adoption path in README extended (vendor pristine originals as baseline; project rules in a marked appended section) and the convention stated in AGENTS.md §5.

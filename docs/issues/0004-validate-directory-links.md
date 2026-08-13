@@ -1,7 +1,7 @@
 ---
 type: issue
 id: "0004"
-status: open
+status: done
 created: 2026-08-13
 related:
   - "docs/sources/feldtest-first-adoption-2026-08.md"
@@ -19,3 +19,5 @@ file-target-only rule explicitly in ADR-0003/AGENTS.md so adopters
 expect it.
 
 *Evidence: [field-test hand-back](../../docs/sources/feldtest-first-adoption-2026-08.md), item 8.*
+
+**Closed 2026-08-13 (v0.1.2):** decided by sorb — behaviour stays strict; the file-target-only rule is now stated explicitly in AGENTS.md §5. No code change.

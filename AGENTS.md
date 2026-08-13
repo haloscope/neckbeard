@@ -47,6 +47,11 @@ use judgment — but say so.
 - A task is well-defined only if it names all four:
   **files, action, verify, done.** Missing one? The task is too vague — say so.
 
+### Exceptions need decisions
+- Every **permanent exception** to a rule requires an ADR. An exception
+  that is documented but never decided is an error.
+  (Field-proven rule from the first adoption; see docs/issues/0006.)
+
 ### Verification before completion
 - Never claim something works without evidence: a test run, command
   output, a rendered result. "Should work" is not a status.
@@ -93,6 +98,9 @@ past decisions and learnings are input, not trivia.
 
 - All artifacts are standard Markdown with YAML frontmatter conforming to
   `schema.yaml`. Standard links only (`[text](path.md)`), no wikilinks.
+  **Link targets are files, never directories** — `validate.py` rejects
+  `[x](dir/)` even where a forge would render it; point at the
+  directory's README or a concrete file instead.
   Diagrams as Mermaid. This keeps every artifact portable across LLMs,
   GitLab, and Obsidian.
 - Never invent frontmatter fields or status values. `validate.py` is
@@ -101,3 +109,10 @@ past decisions and learnings are input, not trivia.
 - Deterministic jobs (status generation, validation, link checks) are done
   by scripts, not by you. If a deterministic job lacks a script, propose
   one instead of doing it by inference.
+- **Adopting projects:** project-specific rules live in a marked section
+  *appended below* the upstream content of this file (marker line, e.g.
+  `<!-- project-section -->`) — never woven into it. Vendor the pristine
+  upstream originals under `docs/sources/upstream/<version>/` and check
+  the upstream part byte-for-byte against them in CI: a silent rewrite
+  of the framework files becomes a red pipeline, a framework upgrade
+  becomes a deliberate baseline-plus-copy commit.

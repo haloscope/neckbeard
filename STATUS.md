@@ -14,7 +14,7 @@
 
 _none active_
 
-## ADRs (6)
+## ADRs (7)
 
 | ADR | Status | Title |
 |---|---|---|
@@ -24,6 +24,7 @@ _none active_
 | [0004](docs/adr/0004-schema-first-validation.md) | accepted | ADR-0004: Schema-first validation, ontology-ready in stages |
 | [0005](docs/adr/0005-mit-license.md) | accepted | ADR-0005: Neckbeard is MIT-licensed |
 | [0006](docs/adr/0006-versioning-and-release-tags.md) | accepted | ADR-0006: Versioning and release tags |
+| [0007](docs/adr/0007-release-cadence-after-field-test.md) | accepted | ADR-0007: Release cadence — corrections now, structural harvest after stage-2 evidence |
 
 ## Open AARs (1)
 

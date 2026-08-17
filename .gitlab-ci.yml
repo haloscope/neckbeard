@@ -31,7 +31,7 @@ vendor-update:
     - BR="vendor/ponytail-update-${HASH}"
     - git checkout -b "$BR"
     - git add -A
-    - git commit -m "vendor: update ponytail to ${HASH}"
+    - 'git commit -m "vendor: update ponytail to ${HASH}"'
     - >
       git push "https://oauth2:${VENDOR_PUSH_TOKEN}@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git"
       "HEAD:refs/heads/${BR}"

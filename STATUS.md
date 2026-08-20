@@ -19,7 +19,7 @@
 | [0014](docs/issues/0014-priority-field-revisit.md) | open | Priority field: the deferred revisit, now with evidence |
 | [0015](docs/issues/0015-commit-time-anonymisation-here.md) | open | Commit timestamps of this repo expose working hours |
 | [0016](docs/issues/0016-ponytail-sync-v012.md) | open | Sync with-ponytail after v0.1.2 |
-| [0017](docs/issues/0017-pre-publication-review.md) | open | Pre-publication review: hand-back content and identity before any push beyond git.lab |
+| [0017](docs/issues/0017-pre-publication-review.md) | open | Pre-publication review: hand-back content and identity before any push beyond the owning autonomous system |
 | [0018](docs/issues/0018-ci-red-since-v011.md) | open | CI pipelines red since v0.1.1 |
 
 ## Active design docs (1)

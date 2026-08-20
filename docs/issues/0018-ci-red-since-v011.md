@@ -4,7 +4,7 @@ id: "0018"
 status: open
 created: 2026-08-13
 related:
-  - "docs/design/2026-08-20-second-hand-back-and-harvest-rule.md"
+  - "docs/design/done/2026-08-20-second-hand-back-and-harvest-rule.md"
 ---
 
 # CI pipelines red since v0.1.1

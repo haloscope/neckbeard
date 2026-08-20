@@ -31,11 +31,9 @@
 | [0026](docs/issues/0026-locked-artifacts-have-no-mechanical-protection.md) | open | A "binding, never edited" rule in prose has nothing that contradicts an edit |
 | [0027](docs/issues/0027-read-first-produces-no-evidence.md) | open | Gate 2 requires reading the relevant records, and records nothing about it |
 
-## Active design docs (1)
+## Active design docs (0)
 
-| Design | Gate | Title |
-|---|---|---|
-| [2026-08-20-second-hand-back-and-harvest-rule](docs/design/2026-08-20-second-hand-back-and-harvest-rule.md) | gate-5 | Design: Second hand-back — sustained-operation findings, and a harvest rule that cannot leak |
+_none active_
 
 ## ADRs (8)
 
@@ -48,7 +46,7 @@
 | [0005](docs/adr/0005-mit-license.md) | accepted | ADR-0005: Neckbeard is MIT-licensed |
 | [0006](docs/adr/0006-versioning-and-release-tags.md) | accepted | ADR-0006: Versioning and release tags |
 | [0007](docs/adr/0007-release-cadence-after-field-test.md) | accepted | ADR-0007: Release cadence — corrections now, structural harvest after stage-2 evidence |
-| [0008](docs/adr/0008-harvest-carries-classes-not-adopter-specifics.md) | proposed | ADR-0008: A harvest carries failure classes, never adopter specifics |
+| [0008](docs/adr/0008-harvest-carries-classes-not-adopter-specifics.md) | accepted | ADR-0008: A harvest carries failure classes, never adopter specifics |
 
 ## Open AARs (2)
 

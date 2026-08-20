@@ -1,12 +1,12 @@
 ---
 type: adr
 id: "0008"
-status: proposed
+status: accepted
 date: 2026-08-20
 supersedes: null
 superseded_by: null
 related:
-  - "docs/design/2026-08-20-second-hand-back-and-harvest-rule.md"
+  - "docs/design/done/2026-08-20-second-hand-back-and-harvest-rule.md"
   - "docs/aar/2026-08-13-hand-back-near-leak.md"
   - "docs/issues/0017-pre-publication-review.md"
 ---

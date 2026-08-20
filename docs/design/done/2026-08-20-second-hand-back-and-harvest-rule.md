@@ -1,6 +1,6 @@
 ---
 type: design
-status: gate-5
+status: done
 date: 2026-08-20
 size: L
 related:

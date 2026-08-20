@@ -587,8 +587,51 @@ decision. What this slice can say is proven: with the 0018 defect
 neutralised in a scratch copy, the file parses and the `validate` job
 reads exactly the four steps intended, the new one last.
 
-**Status:** `DONE_WITH_CONCERNS` — the artifact is correct and verified;
-the pipeline it is added to does not execute, for a pre-existing reason
+**A second correction, forced by running the check on this very slice.**
+Committing slice 2 regenerated `STATUS.md`, and the next run reported a
+hostname in it — carried there from the *title* of an existing issue,
+written months of commits ago. The harvest had not written that line; it
+had regenerated the file containing it.
+
+Gate 2 says a harvest "is checked against what it adds". The
+implementation read whole files that the range touched, which is not the
+same thing and pulls every pre-existing line of a regenerated index into
+the result. The check now reads the **added lines** of the range, plus the
+names of touched files and the commit messages. That is the approved
+architecture; the earlier reading was a defect against it.
+
+**The counter-controls then found two holes in the controls themselves.**
+Running each deliberate break in turn showed that two of them failed
+*nothing*: the assertions exercised the scanners directly and never went
+through `main()`, so a wiring error — calling the whole-file reader for a
+range, or dropping the commit scan entirely — would have shipped green.
+Two end-to-end assertions now go through `main()` itself. Final state,
+seven breaks, no gaps:
+
+| Break | Failing assertions |
+|---|---|
+| `git()` returns `""` instead of raising | 8 |
+| comparison made case-sensitive | 1, 3, 4, 12, 13, 14, 15, 16 |
+| word boundaries loosened to substring | 10 |
+| empty term list waved through | 6 |
+| diff reader swapped for whole-file reader | 15 |
+| hunk position discarded | 14, 15 |
+| commit messages not scanned | 16 |
+
+Sixteen assertions, seven breaks, **zero uncovered**. The lesson is worth
+more than the fix: a test suite that only ever calls its own functions
+proves the functions, not the program.
+
+**Status:** `DONE_WITH_CONCERNS` — the artifacts are correct and verified;
+the pipeline they are added to does not execute, for a pre-existing reason
 now diagnosed and reported.
+
+**One finding handed on, not fixed.** An existing issue's *title* contains
+an infrastructure hostname. Under ADR-0008 that is a term which must not
+travel, and it will reach any generated index that lists the issue. Fixing
+it means rewording an existing issue, which the Gate-3 boundaries forbid —
+so it is reported here for the owner rather than resolved. It also is not
+this harvest's leak: with the corrected scope, this branch adds no such
+line.
 
 > **STOP — slice review.**

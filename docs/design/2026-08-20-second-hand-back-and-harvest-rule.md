@@ -539,4 +539,56 @@ bound to the range. Correction 2 works as intended.
 
 **Status:** `DONE`
 
+> **STOP — slice review.** Approved by the owner, 2026-08-20.
+
+### Slice 2 — The rule, made binding
+
+- [x] **Decide it** — files: `docs/adr/0008-harvest-carries-classes-not-adopter-specifics.md`
+  — action: record the rule as an ADR with the options weighed — verify:
+  `validate.py` — done: `status: proposed`, awaiting the owner's acceptance.
+- [x] **State it where adopters copy it** — files: `WORKFLOW.md` — action:
+  new section *Harvesting to the Framework*, pointed at from the two
+  places that already spoke about harvesting — verify: `validate.py`
+  resolves the link to ADR-0008 — done.
+- [x] **Keep the mechanism honest** — files: `.gitlab-ci.yml` — action:
+  add `check_harvest.py --selftest` to the `validate` job — verify: see
+  the finding below — done, with a caveat that is not mine to close.
+
+**Evidence.** Under the CI's own interpreter (3.12): `validate: 0 errors,
+0 warnings`; `gen_status --check: STATUS.md is current`; `selftest: 12
+assertions passed`; harvest check over `main..HEAD`: no findings.
+
+**The CI line cannot have run — issue 0018's cause, found by accident.**
+Adding a step meant parsing `.gitlab-ci.yml`, and it does not parse. The
+file is **invalid YAML**, and was before this undertaking touched it:
+
+```
+mapping values are not allowed here, line 39, column 39
+        -o merge_request.title="vendor: update ponytail to ${HASH}"
+                                       ^ here
+```
+
+The `git push` command is written as a plain, unquoted multi-line scalar.
+Inside one of those, a colon followed by a space ends the scalar and
+starts a mapping — the surrounding double quotes are shell syntax and mean
+nothing to the YAML parser. Isolated to that construct and confirmed both
+ways: the same two lines parse with the colon removed and fail with it
+present.
+
+Consequence: the whole configuration is rejected, so **no job in this
+repository has ever run** — which is exactly what issue 0018 records
+("red since v0.1.1, all five runs") without naming a cause. It also means
+the step added in this slice is inert until 0018 is fixed.
+
+Not fixed here. 0018 is a filed issue with its own disposition, and
+absorbing it silently into a harvest slice would be the scope creep the
+rules warn about — a one-line quoting change is still someone else's
+decision. What this slice can say is proven: with the 0018 defect
+neutralised in a scratch copy, the file parses and the `validate` job
+reads exactly the four steps intended, the new one last.
+
+**Status:** `DONE_WITH_CONCERNS` — the artifact is correct and verified;
+the pipeline it is added to does not execute, for a pre-existing reason
+now diagnosed and reported.
+
 > **STOP — slice review.**

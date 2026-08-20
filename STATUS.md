@@ -22,11 +22,13 @@
 | [0017](docs/issues/0017-pre-publication-review.md) | open | Pre-publication review: hand-back content and identity before any push beyond git.lab |
 | [0018](docs/issues/0018-ci-red-since-v011.md) | open | CI pipelines red since v0.1.1 |
 
-## Active design docs (0)
+## Active design docs (1)
 
-_none active_
+| Design | Gate | Title |
+|---|---|---|
+| [2026-08-20-second-hand-back-and-harvest-rule](docs/design/2026-08-20-second-hand-back-and-harvest-rule.md) | gate-4 | Design: Second hand-back — sustained-operation findings, and a harvest rule that cannot leak |
 
-## ADRs (7)
+## ADRs (8)
 
 | ADR | Status | Title |
 |---|---|---|
@@ -37,6 +39,7 @@ _none active_
 | [0005](docs/adr/0005-mit-license.md) | accepted | ADR-0005: Neckbeard is MIT-licensed |
 | [0006](docs/adr/0006-versioning-and-release-tags.md) | accepted | ADR-0006: Versioning and release tags |
 | [0007](docs/adr/0007-release-cadence-after-field-test.md) | accepted | ADR-0007: Release cadence — corrections now, structural harvest after stage-2 evidence |
+| [0008](docs/adr/0008-harvest-carries-classes-not-adopter-specifics.md) | proposed | ADR-0008: A harvest carries failure classes, never adopter specifics |
 
 ## Open AARs (2)
 

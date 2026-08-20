@@ -7,6 +7,10 @@ validate:
     - pip install --quiet pyyaml
     - python scripts/validate.py
     - python scripts/gen_status.py --check
+    # The harvest check cannot run here — there is no adopter term list in
+    # this repo, by design (ADR-0008). Its positive control can, and must:
+    # adopters copy this script, so a broken one would ship silently.
+    - python scripts/check_harvest.py --selftest
 
 # Manual vendor refresh for the with-ponytail branch.
 # Appears as a play button only in pipelines of that branch.

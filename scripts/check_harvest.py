@@ -17,8 +17,17 @@ Fails closed (exit 1, never "clean"):
   * a file that cannot be read as text — a harvest is prose, and a blob
     nobody can read is precisely what nobody can review
 
+Deliberately NOT a fourth surface: the author and committer identity of
+those commits. It is a repository-wide property rather than something a
+harvest carries in — the framework's own history and LICENSE hold the same
+name — so a run over any branch would report it every time. A check that
+is permanently red reports nothing, and teaches people to skip it. Commit
+identity belongs to the repository's publication decision, not to this
+check; verify it there, once, and not in every harvest.
+
 ⚠️ This check supplements human review, it does not replace it. A denylist
-finds only the nouns somebody thought of. Treating a green run as proof of
+finds only the nouns somebody thought of, and the paragraph above names a
+surface it does not look at by design. Treating a green run as proof of
 absence is the same mistake that made the leak it exists to prevent.
 
 The term list belongs to the adopter and is never shipped with the

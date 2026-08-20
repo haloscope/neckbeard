@@ -514,6 +514,29 @@ Two things follow, and both matter more than the fix:
   forbid — and leaving the name in the branch's history would have meant
   the harvest still carried it, which is the whole point.
 
+**A fourth surface, examined and deliberately declined.** A word-boundary
+search over the branch's full log found four hits the check reports as
+clean — all four the *author identity* of the commits, not their message
+text. The check reads message bodies, not `%an`/`%ae`.
+
+Extending it was the obvious move and would have been wrong. Commit
+identity is a repository-wide property, not something a harvest carries
+in: this framework's own history and its LICENSE hold the same name, so
+the check would flag every run of every branch forever. A permanently red
+check reports nothing — the adopter's own findings include that exact
+pattern, and issue 0017's point 4 already has the identity question filed
+for the owner to decide once.
+
+So the boundary is now written into the script's docstring instead of
+being an accident: identity is named as a surface it does not look at, and
+why. A blind spot that is documented is a scope; one that is not is the
+"reports success but is blind" class. The distinction is the whole reason
+the paragraph exists.
+
+*Also confirmed by the same measurement:* the pre-existing hits in
+`LICENSE` and the creation AAR are **not** reported, because scope is
+bound to the range. Correction 2 works as intended.
+
 **Status:** `DONE`
 
 > **STOP — slice review.**

@@ -1,6 +1,6 @@
 ---
 type: design
-status: gate-3
+status: gate-4
 date: 2026-08-20
 size: L
 related:
@@ -423,4 +423,97 @@ framework should require of everyone.
    Nothing in Gate 3 depends on the answer: the issues carry dispositions
    either way.
 
-> **STOP — awaiting Gate 3 approval.**
+> **Gate 3 approved by the owner, 2026-08-20.**
+
+## Gate 4 — Vertical Slices
+
+### Slice 1 — Tracer bullet: the mechanism, end to end
+
+- [x] **Build the check** — files: `scripts/check_harvest.py` — action:
+  three scanners (contents, filenames, commit messages), fails closed,
+  built-in positive control — verify: `--selftest` — done: all assertions
+  pass **and** each is shown to fail when the code it guards is broken.
+- [x] **Run it for real** — files: the branch itself — action: run with an
+  adopter term list held outside the repository — verify: zero findings
+  over what this harvest adds, and a deliberately planted adopter name is
+  caught — done: both observed.
+
+**Evidence.**
+
+*Positive control, twelve assertions:*
+
+```
+ok  1 term in a file body is found, with its line number
+ok  2 term in a filename is found while the body is clean
+ok  3 term in a commit message is found while the tree is clean
+ok  4 a lower-case term matches a capitalized occurrence
+ok  5 the excerpt masks the term instead of repeating it
+ok  6 an empty term list raises instead of passing
+ok  7 a missing term list raises instead of passing
+ok  8 an unresolvable range raises instead of reporting nothing
+ok  9 clean input against a non-empty list finds nothing
+ok 10 a bare term does not match inside an unrelated word
+ok 11 a *term* does match inside a word, when opted into
+ok 12 with a range, exactly that range's files are read
+selftest: 12 assertions passed
+```
+
+*The control was itself controlled.* A suite only ever seen green is a
+hypothesis, so five deliberate breaks were introduced one at a time, each
+caught by exactly the assertion that guards it:
+
+| Break | Failed |
+|---|---|
+| `git()` returns `""` instead of raising | 8 |
+| comparison made case-sensitive | 1, 3, 4 |
+| empty term list waved through | 6 |
+| range scoping falls back to "all files" | 12 |
+| word boundaries loosened to substring | 10 |
+
+*Real run:* `no findings — 28 term(s), commits main..HEAD`, exit 0. With
+an adopter name deliberately planted in this document, the same command
+reported one finding, correctly located and with the term masked in the
+excerpt.
+
+**Three corrections the tracer bullet forced** — all three are design
+errors from Gate 3 that only a running artifact could expose:
+
+1. **Word boundaries replace substring matching.** The first real run
+   flagged every commit trailer in this repository, because a personal
+   name sits inside the ordinary English word "authored". Gate 3 named
+   substring matching as the shakiest call; it was wrong within minutes of
+   running. Substring is still available per term via `*term*`, for the
+   rare name that hides in a compound.
+2. **Scope is bound to the range.** The first run scanned every tracked
+   file and returned nineteen findings, of which none belonged to this
+   harvest: they were the repository's own pre-existing content, which is
+   issue 0017's subject and explicitly out of scope. A harvest is checked
+   against what it adds.
+3. **"Shared vocabulary is not a secret" got its second case.** After the
+   forge name found while writing Gate 3, a second forge name turned up
+   the same way — named in this repo's own ADR about where issues live.
+   Both are now excluded in the list's own comments, with the reason.
+
+**The check caught its own author.** Immediately after the slice was
+committed, the run over the branch reported two findings — both in
+`check_harvest.py` itself. Documenting *why* substring matching is wrong,
+I had written the adopter's real personal name into the framework's source
+code, twice: once in a docstring and once in a test fixture. The tool
+built to stop exactly that caught it within seconds of existing.
+
+Two things follow, and both matter more than the fix:
+
+- **It is not a hypothetical risk.** Between Gate 3 and this line, with
+  the leak rule in front of me and while writing about it, I leaked. The
+  argument that a harvest needs a mechanical check rather than care and
+  attention no longer rests on the earlier incident alone.
+- **The name was replaced by a fictional equivalent** (`rene` inside
+  `serene`) that demonstrates the same class, and the slice commit was
+  amended rather than followed by a fix. Amending an own, unpushed,
+  not-yet-reviewed commit is not the history rewrite the boundaries
+  forbid — and leaving the name in the branch's history would have meant
+  the harvest still carried it, which is the whole point.
+
+**Status:** `DONE`
+
+> **STOP — slice review.**

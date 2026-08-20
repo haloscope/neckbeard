@@ -678,4 +678,58 @@ each of them.
 
 **Status:** `DONE`
 
+> **STOP — slice review.** Approved by the owner, 2026-08-20, together
+> with an instruction to record the cause of issue 0018 in that issue.
+
+### Slice 4 — The nine issues
+
+- [x] **File them** — files: `docs/issues/0019`–`0027` — action: one issue
+  per gap, in the short hand-back form the existing ones use, each with an
+  ADR-0007 disposition — verify: `validate.py`, `gen_status --check` —
+  done: nine files, all clean.
+- [x] **Prove criterion 1 mechanically** — action: read the mapping table
+  and resolve every target against the issue directory — verify: a script,
+  not a reading — done: eleven patterns, **zero** without an existing
+  target.
+- [x] **Record the cause of 0018** — files:
+  `docs/issues/0018-ci-red-since-v011.md` — action: the diagnosis with its
+  reproduction — done, in its own commit.
+
+**Evidence.** `validate: 0 errors, 0 warnings`; `gen_status --check:
+STATUS.md is current`; `selftest: 16 assertions passed`; harvest check over
+`main..HEAD`: no findings. Criterion 1: eleven patterns in the table, zero
+without an existing target.
+
+**Dispositions**, so the split is visible without opening nine files:
+
+| Disposition | Issues |
+|---|---|
+| `0.1.x now` — rule additions, no schema impact | 0021, 0024 |
+| `after stage 2 (0.2.0)` — structural | 0019, 0022, 0025, 0026 |
+| `refinement decides` | 0020, 0023, 0027 |
+
+**Three of the nine argue against their own remedy**, which is deliberate:
+
+- 0019 warns that a script can count rituals but not weigh judgement, so a
+  ritual counter would produce findings nobody can act on — and names the
+  uncomfortable alternative, that the gate thresholds may be cut too
+  tightly for daily operation.
+- 0020 says the same of the closeout duty: if it is only ever met when
+  someone asks, the threshold may be wrong rather than the discipline.
+- 0027 states outright that a required "records read" list would be
+  satisfied by listing filenames, turning the framework's own evidence rule
+  into theatre, and that closing it as rejected would beat a ritual.
+
+A hand-back that only ever asks for more rules is one that has not been
+thought through. These three are the check on that.
+
+**On 0018.** The recorded suspicion — runner egress for `pip install` — is
+now shown to be wrong, because no job was ever created. The wrong guess is
+left standing above the diagnosis rather than deleted: it would have sent
+the next reader to the runner's network, and that is worth seeing. The fix
+is not applied; it was found while adding a step for a different purpose,
+and a pipeline definition deserves a deliberate change.
+
+**Status:** `DONE`
+
 > **STOP — slice review.**

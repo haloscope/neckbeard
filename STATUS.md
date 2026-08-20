@@ -35,7 +35,7 @@
 
 | Design | Gate | Title |
 |---|---|---|
-| [2026-08-20-second-hand-back-and-harvest-rule](docs/design/2026-08-20-second-hand-back-and-harvest-rule.md) | gate-4 | Design: Second hand-back — sustained-operation findings, and a harvest rule that cannot leak |
+| [2026-08-20-second-hand-back-and-harvest-rule](docs/design/2026-08-20-second-hand-back-and-harvest-rule.md) | gate-5 | Design: Second hand-back — sustained-operation findings, and a harvest rule that cannot leak |
 
 ## ADRs (8)
 

@@ -1,6 +1,6 @@
 ---
 type: design
-status: gate-4
+status: gate-5
 date: 2026-08-20
 size: L
 related:
@@ -732,4 +732,101 @@ and a pipeline definition deserves a deliberate change.
 
 **Status:** `DONE`
 
-> **STOP — slice review.**
+> **STOP — slice review.** Approved by the owner, 2026-08-20, with the
+> role term adopted for the adopter's repository name as well: one word
+> per concept across the framework, not two.
+
+### Handoff
+
+Done slices: 1 (mechanism), 2 (rule and ADR-0008), 3 (digest), 4 (nine
+issues). Open decisions: the version question from Gate 2 — whether this
+evidence triggers the 0.2.0 structural harvest — and the acceptance of
+ADR-0008, both the owner's. Next step: the owner reviews the branch; only
+then can a push be considered, under the issue-0017 gate.
+
+## Gate 5 — Closeout (AAR)
+
+**Planned vs. actual.** Planned: file the sustained-operation findings and
+put a non-leaking harvest rule into the framework. Both delivered, in five
+slices rather than the four the Gate-3 file table implied — slice 1 needed
+a second pass after running it exposed design errors that reading had not.
+
+Against the four acceptance criteria from Gate 1:
+
+| # | Criterion | Result |
+|---|---|---|
+| 1 | Every pattern filed or mapped, zero unaccounted | **met** — eleven patterns, zero without a target, resolved by script |
+| 2 | Anonymity measured, not asserted | **partly met** — see below |
+| 3 | The rule in `WORKFLOW.md`, applicable by a stranger | **met** — one section, two pointers, binding via ADR-0008 |
+| 4 | Nothing leaves the machine | **met** — push URL disabled, branch has no upstream |
+
+**Criterion 2 is the honest one.** The measurement did happen: every commit
+of this branch was checked, and the check found real leaks twice —
+including one this session had just written itself. What is *not* true is
+"repeatable by anyone later": the term list exists only in a scratch
+directory on one machine and would vanish with it. The criterion was also
+written before the owner's Gate-1 instruction that the list stays with the
+adopter, so its wording ("a committed term list") describes a design that
+was then deliberately changed. What it has to mean now: the list is
+committed **in the adopter's steering repo**, beside that project's other
+checks. That is adopter-side work, which Gate 1 declared a non-goal — so it
+leaves here as a named open item rather than a quiet omission.
+
+**Why the difference.** Three of the four corrections in this undertaking
+came from *running* an artifact, not from designing one, and each had been
+argued confidently beforehand. Substring matching was defended in Gate 3 as
+the safer default and was wrong within minutes. Scope was corrected once,
+then corrected again when a regenerated index pulled a hostname in from an
+issue title. The pattern is uncomfortable and worth naming: the design
+gates produced a *plausible* design; only execution produced a correct one.
+That is what a tracer bullet is for, and it argues for reaching one sooner
+rather than for planning harder.
+
+**Learnings.**
+
+- **A test suite that only calls its own functions proves the functions,
+  not the program.** Two deliberate breaks passed every assertion until the
+  suite was made to run `main()`. Unit-level confidence hid a wiring-level
+  hole, and only the counter-controls exposed it.
+- **Controls need controls.** Every assertion here was verified by breaking
+  the code it guards. That found two useless assertions — one tautological,
+  one vacuous — which had been passing since the moment they were written.
+- **A documented blind spot is a scope; an undocumented one is a defect.**
+  Commit identity is deliberately outside the check, and saying so in the
+  script is the whole difference between a boundary and not having looked.
+- **Shared vocabulary is not a secret.** Twice a term was listed that the
+  framework itself uses. A denylist that flags the framework's own words
+  teaches people to skip it, which costs more than the noise it removes.
+- **The most valuable finding arrived by accident.** The cause of a
+  standing issue — a configuration that has never parsed, so no job has
+  ever run — surfaced only because adding one line required parsing the
+  file. The suspicion recorded when that issue was filed was wrong, and
+  would have sent the next reader to the wrong place entirely.
+
+**Harvested.** ADR-0008 (proposed); the *Harvesting to the Framework*
+section in `WORKFLOW.md`; `scripts/check_harvest.py` with its selftest
+wired into CI; the digest under `docs/sources/`; nine issues, 0019–0027;
+the cause of issue 0018 recorded in that issue; the hostname and the
+repository name removed from issue 0017.
+
+**Open uncertainties** — the choices I am least confident about:
+
+1. **The term list is not yet where it belongs** (criterion 2 above).
+   Until it is committed in the adopter's steering repo, the check is a
+   one-off rather than a gate.
+2. **Substring versus word boundaries.** Word boundaries are right for the
+   false positive that forced the change; whether they miss a real leak
+   inside a compound is untested, and `*term*` pushes that judgement onto
+   whoever writes the list.
+3. **The version question**, unchanged from Gate 2: stage-2 evidence has
+   begun arriving rather than concluded, and the reading is the owner's.
+4. **Nine issues may be too many.** Three argue against their own remedy,
+   which is honest but is also a signal that the framework may need fewer
+   and better rules rather than more of them — precisely what issue 0019
+   warns about, aimed back at this hand-back.
+5. **This digest was written by the party that produced the deviations.**
+   The caveat the adopter put on its own register applies here too: not an
+   argument against the findings, but a reason to read them adversarially.
+
+> **STOP — awaiting Gate 5 approval.** On approval: set `status: done`,
+> move this file to `docs/design/done/`, re-run `gen_status.py`.

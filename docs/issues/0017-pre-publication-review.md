@@ -36,14 +36,18 @@ What an outside reader would learn today:
 
 Options to weigh (refinement / before publication): keep as-is and
 accept; replace the source with an anonymized digest (original stays
-in the private management repo — the where-to-look table already
+in the adopter's private steering repo — the where-to-look table already
 points there); scrub project names from issues/ADR; revisit the
 LICENSE line and commit identity. Any history rewrite owes an
 old-to-new mapping (field-project binding constraint).
 
-*Edited 2026-08-20 (owner's decision): the infrastructure hostname that
-stood in the title and twice in the text was replaced by a neutral
-designation. It is a term that must not travel under
+*Edited 2026-08-20 (owner's decision), twice and for two different
+reasons. The infrastructure hostname that stood in the title and twice in
+the text was replaced by a neutral designation: it is a term that must not
+travel under
 [ADR-0008](../adr/0008-harvest-carries-classes-not-adopter-specifics.md),
 and through the generated index it reached every artifact listing this
-issue. Nothing about the gate itself changed.*
+issue. Separately, the adopter's repository name gave way to the role term
+the digests already use — not because it leaked, but so that the framework
+carries one word per concept instead of two. Nothing about the gate itself
+changed.*

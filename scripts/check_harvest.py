@@ -170,11 +170,25 @@ def iter_files(root: Path, paths: list[str],
             raise HarvestError(f"path does not exist: {p}")
 
 
+def _kurzname(root: Path, datei: Path) -> str:
+    """Path for the report — never a crash.
+
+    ⚠️ A file handed in explicitly may sit outside the repository, and
+    `Path.relative_to` raises for those. A check that dies on a path it was
+    asked to read answers nothing; the reason it is not fatal is that the
+    only thing wanted here is a label.
+    """
+    try:
+        return str(datei.relative_to(root))
+    except ValueError:
+        return str(datei)
+
+
 def scan_files(root: Path, paths: list[str], terms: list[str],
                rev_range: str | None = None) -> list[Finding]:
     found: list[Finding] = []
     for datei in iter_files(root, paths, rev_range):
-        rel = str(datei.relative_to(root)) if datei.is_absolute() else str(datei)
+        rel = _kurzname(root, datei)
         found += scan_text(rel, terms, surface="filename", where=rel,
                            numbered=False)
         try:
@@ -360,11 +374,24 @@ def selftest() -> int:
         pruefe("16 main() actually reads the commit messages of the range",
                "commit (" in ausgabe)
 
+        # A path handed in explicitly may sit outside the repository. That
+        # crashed with a ValueError until a positive control tried it.
+        aussen = Path(tempfile.gettempdir()) / "check_harvest_outside.md"
+        aussen.write_text("mentions Zephyr\n", encoding="utf-8")
+        try:
+            draussen = scan_files(root, [str(aussen)], terms)
+        except ValueError:
+            draussen = []
+        finally:
+            aussen.unlink(missing_ok=True)
+        pruefe("17 a path outside the repository is reported, not fatal",
+               len(draussen) == 1 and draussen[0].term == "zephyr")
+
     print()
     if fehler:
         print(f"selftest: {len(fehler)} assertion(s) failed")
         return 1
-    print("selftest: 16 assertions passed")
+    print("selftest: 17 assertions passed")
     return 0
 
 

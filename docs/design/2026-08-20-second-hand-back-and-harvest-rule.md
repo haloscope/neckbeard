@@ -634,4 +634,48 @@ so it is reported here for the owner rather than resolved. It also is not
 this harvest's leak: with the corrected scope, this branch adds no such
 line.
 
+> **STOP — slice review.** Approved by the owner, 2026-08-20. The
+> hostname finding was returned as an instruction: replace it with a
+> neutral designation rather than leave it. Done in a separate commit,
+> which lifts the Gate-3 boundary for that one issue and no other.
+
+### Slice 3 — The hand-back itself
+
+- [x] **Write the digest** — files:
+  `docs/sources/feldtest-sustained-operation-2026-08.md` — action: the
+  eleven patterns generalized to failure class, effect and cause, in the
+  form of the first digest — verify: `validate.py`, plus the harvest check
+  over the file — done: both clean.
+- [x] **Discharge acceptance criterion 1** — action: a mapping table
+  covering all eleven patterns — verify: every pattern names its issue —
+  done: eleven rows, nine targets, zero unaccounted.
+
+**Evidence.** `validate: 0 errors, 0 warnings`. Harvest check over the new
+file: `no findings — 28 terms`. The filename carries no adopter noun.
+
+**How the generalization was done**, since this is the first document
+written under ADR-0008 and sets the pattern for the next one:
+
+- Roles replace names throughout — "a steering repo governing a
+  multi-component product group", "a media library", "an intercepting
+  resolver", "the target log store". No product, host, vendor or person
+  appears.
+- Evidence keeps its shape but loses its identity: "seven occurrences in
+  five different tools" with each occurrence described by *what failed*,
+  never by what it was. A reader can recognise the class in their own
+  stack, which is the entire point of a harvest.
+- Numbers survive where they carry the argument — six missed reviews in
+  four days, a dashboard empty for three months, ten workloads — and are
+  rounded where precision would fingerprint ("tens of thousands of
+  third-party commits", not the exact count).
+- The one honest weakness is stated rather than smoothed: item 8 may be
+  behaviour no framework rule can reach, and says so.
+
+**Two collapses are recorded in the document, not hidden in it.** Eleven
+patterns land as nine issues, and the mapping table shows both pairs, so a
+reader of the issues alone can still see that two distinct patterns fed
+each of them.
+
+**Status:** `DONE`
+
 > **STOP — slice review.**

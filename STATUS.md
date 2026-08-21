@@ -24,9 +24,11 @@
 | [0022](docs/issues/0022-acknowledgements-with-mandatory-expiry.md) | open | Checks accumulate findings nobody can fix, then stop meaning anything |
 | [0023](docs/issues/0023-append-only-artifacts-go-stale-at-the-head.md) | open | Append-only artifacts keep asserting what their appendices refuted |
 
-## Active design docs (0)
+## Active design docs (1)
 
-_none active_
+| Design | Gate | Title |
+|---|---|---|
+| [2026-08-21-judge-and-the-duty-to-leave-a-trace](docs/design/2026-08-21-judge-and-the-duty-to-leave-a-trace.md) | gate-4 | Design: A judge, and the duty to leave a trace |
 
 ## ADRs (9)
 

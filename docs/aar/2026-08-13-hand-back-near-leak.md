@@ -95,3 +95,27 @@ field test itself had documented this exact failure class twice
 - Old objects remain on the origin server until housekeeping/GC.
 - This repo's pipelines have been red since v0.1.1 (all five runs,
   including the hand-back pushes) — filed as issue 0018.
+
+## Appended 2026-08-21: the reachability of the adopter's mirror, confirmed
+
+The correction at the head of this record establishes that the outward
+mirror belongs to the adopting project. The owner has since stated its
+reachability, which is the part that decides whether
+[ADR-0008](../adr/0008-harvest-carries-classes-not-adopter-specifics.md)
+rests on a sound premise:
+
+**The mirror target is access-restricted** — reachable only from inside the
+cluster it runs in and from one known address. It is not open to the
+internet.
+
+That confirms ADR-0008's premise rather than undermining it: the adopter's
+full record — real names, hosts, and the findings register the harvest is
+drawn from — genuinely does stay private, so a generalized digest is the
+only form in which any of it reaches this repository. No superseding
+decision is needed.
+
+Recorded here rather than left in a conversation, because the question
+"is the private record actually private?" is the one an ADR about crossing
+a trust boundary stands or falls on, and the next reader should not have to
+ask it again.
+

@@ -89,3 +89,31 @@ The pseudonym question from the creation AAR is unchanged and remains the
 owner's: a canonical identity has to be *chosen*, and it is not a technical
 detail.
 
+## Decided 2026-08-21 (owner): point 4 is forward-only
+
+**Forward-only. The existing history is not rewritten.** From 2026-08-21
+this repository commits under a canonical identity that carries no personal
+address; every commit up to that point keeps the identity it was made with,
+and no old-to-new mapping is owed because no mapping is created.
+
+The reasoning, so the decision is not re-opened by the next reader:
+
+- The address in commit metadata was never decided — it was the session's
+  git configuration, carried in without intent. Stopping that costs one
+  configuration change and is done.
+- Rewriting what exists would mean rewriting published history from v0.1.0
+  onward, which owes an old-to-new mapping and buys nothing that the
+  forward-only change does not already buy: the exposure is identical
+  whether or not older commits are rewritten, because the identity is
+  already on the origin server and in every clone taken since.
+- The name in `LICENSE` stays. It was chosen deliberately over the pending
+  pseudonym (creation AAR, action 5) and that choice is unchanged.
+
+**Point 4 is closed.** Points 2 and 3 — the protection gap described in the
+first digest, and the stack components named as evidence context — still
+stand, so this gate stays open for any publication beyond the owning
+autonomous system. Point 1 was already measured stale on 2026-08-20.
+
+⚠️ The push of v0.1.3 and v0.2.0 on 2026-08-21 went to this repository's
+origin, which is inside the owning system. It did not cross this gate.
+

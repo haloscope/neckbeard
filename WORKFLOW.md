@@ -202,7 +202,7 @@ rule was not followed — or **framework gap** — the rule is missing,
 unenforceable, or invisible. Keeping those apart is the whole point; a
 finding in the wrong bucket either blames a person for a missing rule or
 writes a behavioural lapse into the rule set. Binding rule:
-[ADR-0010](docs/adr/0010-judge-reads-traces-not-behaviour.md).
+ADR-0010.
 
 ⚠️ The ledger is written by the agent it describes and can be wrong. The
 threat model is drift, not sabotage — see the ADR.
@@ -251,7 +251,7 @@ least likely to notice what is specific about their own project.
 only the nouns somebody thought of, and it deliberately does not look at
 commit identity. Read the diff as well.
 
-Binding rule: [ADR-0008](docs/adr/0008-harvest-carries-classes-not-adopter-specifics.md).
+Binding rule: ADR-0008.
 
 ## Knowledge Handling (summary)
 

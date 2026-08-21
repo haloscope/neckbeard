@@ -16,11 +16,38 @@ validate:
     # this repo, by design (ADR-0008). Its positive control can, and must:
     # adopters copy this script, so a broken one would ship silently.
     - python scripts/check_harvest.py --selftest
-    # check_locked's real run needs git in the image and unshallow history,
-    # neither of which this job has. Wiring that is issue 0029 — a deliberate
-    # change with its own verification, not a drive-by. Its positive control
-    # runs here for the same reason the harvest check's does.
+    # The locked check's positive control runs here for the same reason;
+    # its real run is the separate `locked` job below, which needs history
+    # this job's shallow fetch does not have.
     - python scripts/check_locked.py --selftest
+
+# The locked-artifact gate (issue 0026): accepted decision records and
+# docs/sources are contradicted mechanically, not only in prose.
+#
+# Its own job, for two reasons. A finding has to be attributable — `validate`
+# answering for both schema and locked paths would make a red pipeline
+# ambiguous. And this one needs GIT_DEPTH 0: the default fetch is depth 20
+# and the base commit of a push can sit outside that, which this check
+# reports as an unresolvable range rather than passing.
+#
+# The base comes from the forge, per case, through `rules`. A case with no
+# well-defined base creates no job at all — a declared scope, not a silent
+# skip inside the script. Today that means a new branch's first push and tag
+# pipelines, where there is nothing to compare against.
+locked:
+  image: python:3.12-slim
+  variables:
+    GIT_DEPTH: "0"
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      variables:
+        LOCKED_BASE: "$CI_MERGE_REQUEST_DIFF_BASE_SHA"
+    - if: '$CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BEFORE_SHA != "0000000000000000000000000000000000000000"'
+      variables:
+        LOCKED_BASE: "$CI_COMMIT_BEFORE_SHA"
+  script:
+    - apt-get update -qq && apt-get install -qq -y --no-install-recommends git >/dev/null
+    - python scripts/check_locked.py --range "$LOCKED_BASE..$CI_COMMIT_SHA"
 
 # Manual vendor refresh for the with-ponytail branch.
 # Appears as a play button only in pipelines of that branch.

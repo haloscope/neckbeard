@@ -24,4 +24,16 @@ under the title once an appendix refutes the original diagnosis, or a
 field that visibly ages so staleness becomes measurable rather than a
 matter of noticing.
 
-*Evidence: [second hand-back](../../docs/sources/feldtest-sustained-operation-2026-08.md), items 4 and 6.*
+*Evidence: [second hand-back](../../docs/sources/feldtest-sustained-operation-2026-08.md), item 4.*
+
+*Corrected 2026-08-21: the pointer read "items 4 and 6". Item 6 is the
+evidence of [issue 0025](0025-checks-must-name-what-they-measured.md); item 4
+already carries both patterns this issue was filed for. Corrected at the
+point of the claim rather than appended, because a pointer that resolves to
+the wrong place is not a superseded statement — it is a broken reference.*
+
+*Scope narrowed 2026-08-21: the half about prose documents being appended
+to rather than revised is now [issue 0028](0028-closeout-must-name-what-it-refuted.md)
+and is closed. What remains here is the stale head of an append-only
+artifact, which needs a marker or an ageing field and therefore a schema
+decision.*

@@ -19,6 +19,16 @@ scope:
   link_only:
     - "*.md"
 
+# Files an adopting project holds byte-identical against its vendored
+# baseline (AGENTS.md §5). They are copied into repositories that do not
+# have this repo's docs/, so they must carry no repo-relative link — a
+# link that resolves here and nowhere else makes the adoption path
+# unfollowable. Mention an ADR by its identifier instead.
+vendored:
+  - "AGENTS.md"
+  - "WORKFLOW.md"
+  - "CLAUDE.md"
+
 # Frontmatter fields whose values are links. Values starting with
 # http://, https:// or mailto: are treated as external and only
 # format-checked; everything else must be a repo-root-relative path

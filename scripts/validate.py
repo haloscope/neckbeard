@@ -156,6 +156,28 @@ def check_body_links(path: Path, body: str, root: Path, inbound: set) -> None:
             inbound.add(target)
 
 
+def check_vendored_portable(root: Path, vendored: list) -> None:
+    """Files adopters hold byte-identical must carry no repo-relative link.
+
+    They are copied into repositories without this repo's docs/, so such a
+    link resolves here and nowhere else — and the adoption path in
+    AGENTS.md §5 asks for a byte-for-byte copy, which makes the dead link
+    the adopter's problem and unfixable without breaking the copy.
+    """
+    for rel in vendored or []:
+        path = root / rel
+        if not path.is_file():
+            continue
+        body = path.read_text(encoding="utf-8")
+        body = re.sub(r"```.*?```", "", body, flags=re.S)
+        body = re.sub(r"`[^`\n]*`", "", body)
+        for link in (m.group(1) for m in INLINE_LINK_RE.finditer(body)):
+            if link.startswith(EXTERNAL_PREFIXES) or link.startswith("#"):
+                continue
+            err(path, f"vendored file carries a repo-relative link: {link} "
+                      f"— name the target instead of linking to it")
+
+
 def apply_rules(path: Path, rel: str, meta: dict, spec: dict) -> None:
     for rule in spec.get("rules", []):
         if rule == "superseded_requires_pointer":
@@ -174,6 +196,8 @@ def main() -> int:
     types = schema.get("types", {})
     inbound: set = set()
     wiki_pages: list[tuple[Path, dict]] = []
+
+    check_vendored_portable(root, schema.get("vendored", []))
 
     # Root documents: inline links must resolve; no frontmatter required.
     for rel in schema.get("scope", {}).get("link_only", []):

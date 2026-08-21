@@ -1,7 +1,7 @@
 ---
 type: issue
 id: "0025"
-status: open
+status: rejected
 created: 2026-08-20
 related:
   - "docs/sources/feldtest-sustained-operation-2026-08.md"
@@ -21,5 +21,14 @@ while this asks that any check state the subject it measured - the resolved
 address, the container, the instance - alongside its result, so that a
 reader can tell a correct answer from a confident one about something
 else.
+
+**Closed 2026-08-21 (v0.1.3), folded into [issue
+0012](0012-runtime-check-family.md).** The finding is real and is not
+dropped: a check must state the subject it measured alongside its result.
+It is a principle of the runtime check family rather than an undertaking of
+its own, and 0012 already collects that family's principles — "cannot
+check" is a finding not a skip, abort instead of silently skipping,
+project lists read at runtime. Carrying it as a separate issue would have
+meant deciding the family twice.
 
 *Evidence: [second hand-back](../../docs/sources/feldtest-sustained-operation-2026-08.md), item 6.*

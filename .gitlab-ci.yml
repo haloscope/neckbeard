@@ -20,6 +20,10 @@ validate:
     # its real run is the separate `locked` job below, which needs history
     # this job's shallow fetch does not have.
     - python scripts/check_locked.py --selftest
+    # The judge's real run needs a ledger to judge, which is per session
+    # and not a property of a push. Its positive control belongs here for
+    # the same reason as the others: adopters copy the script.
+    - python scripts/judge.py --selftest
 
 # The locked-artifact gate (issue 0026): accepted decision records and
 # docs/sources are contradicted mechanically, not only in prose.

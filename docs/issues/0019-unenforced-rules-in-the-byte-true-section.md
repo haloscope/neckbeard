@@ -32,4 +32,31 @@ sentence, so the existing validator can demand the design doc a size-L run
 owes; or test whether the gate thresholds are cut too tightly for daily
 operation, which is a different and more uncomfortable answer.
 
+**Rescoped 2026-08-21 (0.2.0).** This issue arrived carrying two findings
+with different natures, and they are separated here.
+
+**Out of scope — the behavioural half.** "A rule was read and then not
+followed" is model failure. It is real, it is well evidenced, and it is not
+a framework gap: no rule the framework adds can make a rule that was
+already read be applied. Filing it as a framework change would write model
+failure into the rule set. Recorded here rather than dropped, because it is
+the more common of the two and the next reader will meet it again.
+
+**In scope — and sharper than filed.** The framework tells adopters to hold
+the always-on rules byte-identical against a vendored baseline
+(`AGENTS.md` §5, since v0.1.2), and gives them **no place to add
+enforcement for those rules**. The adoption path defines an extension point
+for *rules* — the marked project section — and none for *checks*. An
+adopting project that wants to contradict an upstream rule mechanically has
+to break its own drift check to do it.
+
+That is a gap this repository created and only this repository can close.
+It is also not answered by "add a script": the unenforced rules are
+judgement rules, and a script that counts rituals produces findings nobody
+can act on ([issue 0022](0022-acknowledgements-with-mandatory-expiry.md)).
+The two directions worth weighing stay as filed — make the size class an
+artifact so the existing validator can demand the design doc a size-L run
+owes, or test whether the gate thresholds are cut too tightly for daily
+operation.
+
 *Evidence: [second hand-back](../../docs/sources/feldtest-sustained-operation-2026-08.md), the section "The finding that explains most of the others".*

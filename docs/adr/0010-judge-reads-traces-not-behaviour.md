@@ -6,7 +6,7 @@ date: 2026-08-21
 supersedes: null
 superseded_by: null
 related:
-  - "docs/design/2026-08-21-judge-and-the-duty-to-leave-a-trace.md"
+  - "docs/design/done/2026-08-21-judge-and-the-duty-to-leave-a-trace.md"
   - "docs/issues/0019-unenforced-rules-in-the-byte-true-section.md"
   - "docs/issues/0027-read-first-produces-no-evidence.md"
 ---

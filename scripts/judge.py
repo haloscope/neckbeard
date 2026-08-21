@@ -105,11 +105,20 @@ def parse_ledger(path: Path) -> tuple[dict, list[Row], list[Row]]:
     match = re.match(r"^---\n(.*?)\n---\n", text, re.S)
     if not match:
         raise JudgeError(f"{path}: no frontmatter block")
-    meta: dict[str, str] = {}
+    meta: dict[str, object] = {}
+    current: str | None = None
     for line in match.group(1).splitlines():
+        item = re.match(r"^\s+-\s*(.+)$", line)
+        if item and current:
+            meta.setdefault(current, [])
+            if isinstance(meta[current], list):
+                meta[current].append(item.group(1).strip().strip('"'))
+            continue
         kv = re.match(r"^([a-z_]+):\s*(.*)$", line)
         if kv:
-            meta[kv.group(1)] = kv.group(2).strip().strip('"')
+            value = kv.group(2).strip().strip('"')
+            current = kv.group(1)
+            meta[current] = value if value not in ("", "[]") else []
     for field in ("type", "size", "status"):
         if not meta.get(field):
             raise JudgeError(f"{path}: frontmatter is missing '{field}'")
@@ -219,6 +228,22 @@ def check_commits(root: Path, rows: list[Row]) -> list[Finding]:
     return out
 
 
+def check_design_doc(meta: dict, root: Path, closed: bool) -> list[Finding]:
+    """Size L owes a design document. The coverage table claimed this
+    before anything checked it — the inventory drift its own entry warns
+    about, caught on the first read."""
+    if str(meta.get("size", "")).upper() != "L" or not closed:
+        return []
+    related = meta.get("related") or []
+    if isinstance(related, str):
+        related = [related]
+    if any(r.startswith("docs/design/") for r in related):
+        return []
+    return [Finding("model-failure", "workflow/design-doc-for-L",
+                    "size L, but the ledger names no design document in "
+                    "'related'")]
+
+
 def check_ladder(rows: list[Row], closed: bool) -> list[Finding]:
     out: list[Finding] = []
     if not rows:
@@ -250,6 +275,7 @@ def judge(root: Path, ledger: Path) -> list[Finding]:
     findings += check_status_vocabulary(gates)
     findings += check_approvals(gates)
     findings += check_commits(root, gates)
+    findings += check_design_doc(meta, root, closed)
     findings += check_ladder(ladder, closed)
     return findings
 
@@ -324,7 +350,8 @@ type: ledger
 date: 2026-08-21
 size: {size}
 status: {status}
----
+related:
+{related}---
 
 ## Gates
 
@@ -340,9 +367,11 @@ status: {status}
 """
 
 
-def _write(path: Path, *, size="L", status="closed", gates="", ladder=""):
+def _write(path: Path, *, size="L", status="closed", gates="", ladder="",
+           related='  - "docs/design/d.md"\n'):
     path.write_text(LEDGER_HEAD.format(size=size, status=status,
-                                       gates=gates, ladder=ladder),
+                                       gates=gates, ladder=ladder,
+                                       related=related),
                     encoding="utf-8")
 
 
@@ -454,6 +483,11 @@ def selftest() -> int:
         _write(led, gates=rows("12345"), ladder=good_ladder)
         check_that("main() exits 0 on a clean ledger",
                    main(["--ledger", str(led), "--root", str(root)]) == 0)
+
+        _write(led, gates=rows("12345"), ladder=good_ladder, related="")
+        check_that("a closed size-L ledger naming no design document is reported",
+                   any(f.rule == "workflow/design-doc-for-L"
+                       for f in judge(root, led)))
 
         _write(led, gates=rows("13245"), ladder=good_ladder)
         check_that("main() exits 1 on a real violation",

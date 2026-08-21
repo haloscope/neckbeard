@@ -1,6 +1,6 @@
 ---
 type: design
-status: gate-4
+status: done
 date: 2026-08-21
 size: L
 related:
@@ -360,8 +360,188 @@ CLI: `judge.py --ledger <file> [--root .]`, plus `--coverage` and
 
 ## Gate 4 — Vertical Slices
 
-Recorded on completion.
+### Slice 1 — Tracer bullet: instrumentation before enforcement
+
+- [x] **Two artifact types** — files: `schema.yaml` — action: `ledger` and
+  `verdict` as schema entries — verify: `validate.py` accepts them with no
+  validator change — done, which is the rung-2 claim from Gate 2 paying
+  out.
+- [x] **A real ledger, not a fixture** — files:
+  `docs/ledger/2026-08-21-judge-and-trace-duty.md` — action: this session
+  writes its own trace — verify: `validate.py` — done.
+
+**Evidence.** `validate: 0 error(s), 0 warning(s)`. One correction of the
+schema on the way: `judged` was written as `kind: link`, which the engine
+does not implement and would have ignored in silence. Link resolution is
+driven by the top-level `link_fields` list, so the field was moved there —
+a field that looks validated and is not is the "reports success but is
+blind" class, in a schema.
+
+**Writing the first ledger changed the design.** The ladder's three fields
+were specified as *searched / found / why it was built anyway*. That
+phrasing can only record an outcome where something **was** built. A rung
+that held and stopped the work produces no row — so a successful ladder
+walk would have been exactly as invisible as an ignored one. Two of the
+four entries in this session's ledger are `reused:` and would not exist
+under the original wording, including the one that kept a YAML dependency
+out of the parser.
+
+The third field is therefore `outcome`, and it must begin `reused:` or
+`built:`. This is a deliberate deviation from the specification, made
+because the specification reproduced the silent-rule problem one level
+down, inside the fix for it.
+
+**Status:** `DONE`
+
+### Slice 2 — The deterministic judge
+
+- [x] **Build it** — files: `scripts/judge.py` — action: gate order, gates
+  owed by size, approvals, status vocabulary, the git cross-checks, the
+  ladder — verify: `--selftest`, and every assertion shown to fail when
+  the code it guards is broken — done.
+- [x] **Run it on this session's own ledger** — verify: no findings — done.
+
+**Evidence.** `selftest: 17 assertions passed`. Against the real ledger:
+`judge: no findings`.
+
+**The control was controlled.** Nineteen deliberate breaks, one at a time;
+every assertion caught by at least one, none left unguarded:
+
+| Break | Failing assertions |
+|---|---|
+| `git()` returns `""` instead of raising | 8 |
+| gate-order comparison dropped | 2, 17 |
+| duplicate-gate check dropped | 3 |
+| gates-owed-for-size check dropped | 4 |
+| size S judged as if it were L | 5 |
+| status vocabulary opened up | 6 |
+| approval check dropped | 7 |
+| ancestor check always passes | 9 |
+| commit-order comparison dropped | 10 |
+| empty ladder waved through | 11 |
+| placeholder check dropped | 12 |
+| outcome prefix check dropped | 13 |
+| outcome prefix inverted (always red) | 1, 15 |
+| missing frontmatter tolerated | 14 |
+| design-doc check dropped | 16 |
+| frontmatter list parsing dropped | 1, 15 |
+| `judge()` skips the commit checks | 8, 9, 10 |
+| `judge()` skips the design-doc check | 16 |
+| `main()` ignores the findings it got | 17 |
+
+**Status:** `DONE`
+
+### Slice 3 — The rules, and where the inferential judge lives
+
+- [x] **Decide it** — files:
+  `docs/adr/0010-judge-reads-traces-not-behaviour.md` — action: A+B, C at
+  the edge, D after A, non-goal recorded — verify: `validate.py` — done.
+- [x] **State it where adopters copy it** — files: `WORKFLOW.md` — action:
+  *The Run Ledger* and *Judging a Run*, the latter carrying the rubric and
+  the fresh-context condition — verify: `validate.py` resolves the link to
+  ADR-0010 — done.
+- [x] **Give the silent rule a voice** — files: `AGENTS.md` — action: the
+  ladder gains its output duty; the repository map gains the two new
+  directories — done.
+- [x] **Templates and CI** — files: `docs/ledger/template.md`,
+  `docs/verdict/template.md`, `.gitlab-ci.yml` — done.
+
+**Evidence.** `validate: 0/0`; the pipeline configuration parses with seven
+steps in `validate`.
+
+**No verdict artifact was written here, deliberately.** ADR-0010 makes
+fresh context a condition of build form B, not an optimisation. Writing
+this session's verdict inside this session would be void by the rule on the
+day it was accepted. The type ships with a template; its first instance is
+owed by a fresh session and is named in the open items below.
+
+**Status:** `DONE`
+
+### Slice 4 — Coverage, and what it caught
+
+- [x] **Report it** — files: `scripts/judge.py --coverage` — action: every
+  rule of `AGENTS.md` and `WORKFLOW.md` classified by what observes it —
+  done.
+
+**Evidence.** 23 rules inventoried: 8 observed by a script, 6 by the
+ledger, **9 not observable at all**. Before this undertaking the ledger
+column did not exist, so coverage went from **8/23 to 14/23**.
+
+**The report caught its own author within minutes.** The inventory
+claimed *"size L owes a design document — observed by: ledger"*. Nothing
+checked it. That is precisely the drift Gate 3 named as shakiest call 2,
+appearing on the first read of the first report. It was fixed by
+implementing the check rather than by softening the table — with a
+frontmatter list parser, an assertion, and two breaks to guard it.
+
+Worth stating plainly, because it is the whole argument of this
+undertaking turned on itself: **a coverage report is a claim, and a claim
+that nothing contradicts is exactly what this work exists to find.**
+
+**Status:** `DONE`
 
 ## Gate 5 — Closeout
 
-Recorded on completion.
+**Planned vs. actual.** Planned: a ledger, a deterministic judge, a rubric
+for the inferential one, an ADR, and a first coverage report. All
+delivered, in four slices. Against the criteria:
+
+| # | Criterion | Result |
+|---|---|---|
+| 1 | A run leaves a machine-readable trace | **met** — one ledger, gate rows, accepted by `validate.py` with no new validator code |
+| 2 | The ladder stops being silent | **met**, and the shape changed while proving it |
+| 3 | The judge is falsifiable and proven able to fail | **met** — 17 assertions, 19 breaks, none unguarded |
+| 4 | The judge cannot become permanently red | **met** — four would-be standing findings named in Gate 2 and designed out |
+| 5 | A first coverage report exists | **met** — 14/23, produced by the tool |
+
+**What this work made false** — the Gate-5 question, asked of itself:
+
+- **The coverage inventory's own first version.** It claimed a check that
+  did not exist. Corrected by building the check.
+- **The specified shape of the ladder fields.** *"Why it was built anyway"*
+  cannot record a rung that held. Replaced by `outcome`.
+- **Issue 0019's framing, partly.** It says adopters cannot add enforcement
+  where the unenforced rules live. True, and incomplete: they could not add
+  *observability* either, and that half is now shipped from here. The
+  enforcement half stands.
+- **Nothing in issue 0027.** It was closed as rejected because a "records
+  read" list is satisfied by naming filenames. The ladder duty is close to
+  that line and stays on the right side of it: it asks for candidates that
+  were considered and an outcome, not for a reading list. Checked
+  deliberately rather than assumed.
+
+**Learnings.**
+
+- **The silent-rule problem recurs one level down.** The fix for an
+  unobservable rule was itself unobservable in the reuse case. Any
+  instrument has to be asked the question it was built to ask.
+- **A report is a claim.** Coverage looked like output rather than an
+  assertion, so nothing guarded it — and it was wrong in its first
+  version.
+- **Rung 2 paid more than expected.** Two artifact types cost a schema
+  entry and no validator code, because `validate.py` was already a generic
+  engine. The judge is small only because the seam was found first.
+- **Instrumentation before enforcement was the right order.** The useful
+  output of run one is not a verdict but the number 14/23.
+
+**Harvested.** ADR-0010; the `ledger` and `verdict` types with templates;
+`scripts/judge.py` with its selftest in CI; *The Run Ledger* and *Judging a
+Run* in `WORKFLOW.md`; the ladder's output duty in `AGENTS.md`; the first
+coverage report.
+
+**Open uncertainties.**
+
+1. **No verdict exists yet.** The first one is owed by a fresh session, and
+   until it runs, build form B is a written rubric that has never been
+   exercised — a hypothesis by this framework's own standard.
+2. **The coverage inventory is hand-maintained** and drifted within one
+   session. Nothing contradicts that drift.
+3. **A session has no mechanical boundary.** Two sessions in one ledger,
+   or one split across two, are indistinguishable from outside.
+4. **Nine rules remain unobservable.** Whether each should gain a trace or
+   be recognised as decoration and dropped is a question for the
+   refinement, and it is the most valuable thing this report produces.
+
+> **Gate 5 approved by the owner, 2026-08-21.** On approval: `status:
+> done`, move to `docs/design/done/`, re-run `gen_status.py`, close the
+> ledger.

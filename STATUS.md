@@ -24,13 +24,11 @@
 | [0022](docs/issues/0022-acknowledgements-with-mandatory-expiry.md) | open | Checks accumulate findings nobody can fix, then stop meaning anything |
 | [0023](docs/issues/0023-append-only-artifacts-go-stale-at-the-head.md) | open | Append-only artifacts keep asserting what their appendices refuted |
 
-## Active design docs (1)
+## Active design docs (0)
 
-| Design | Gate | Title |
-|---|---|---|
-| [2026-08-21-judge-and-the-duty-to-leave-a-trace](docs/design/2026-08-21-judge-and-the-duty-to-leave-a-trace.md) | gate-4 | Design: A judge, and the duty to leave a trace |
+_none active_
 
-## ADRs (9)
+## ADRs (10)
 
 | ADR | Status | Title |
 |---|---|---|
@@ -43,6 +41,7 @@
 | [0007](docs/adr/0007-release-cadence-after-field-test.md) | accepted | ADR-0007: Release cadence — corrections now, structural harvest after stage-2 evidence |
 | [0008](docs/adr/0008-harvest-carries-classes-not-adopter-specifics.md) | accepted | ADR-0008: A harvest carries failure classes, never adopter specifics |
 | [0009](docs/adr/0009-patterns-as-wiki-pages-with-a-harvest-state.md) | accepted | ADR-0009: Recurring patterns live as wiki pages with a harvest state |
+| [0010](docs/adr/0010-judge-reads-traces-not-behaviour.md) | accepted | ADR-0010: A judge reads traces, so every rule owes one |
 
 ## Open AARs (3)
 

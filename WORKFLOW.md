@@ -78,6 +78,15 @@ sections.
 - Each slice ends with verification evidence, a status
   (`DONE` | `DONE_WITH_CONCERNS` | `NEEDS_CONTEXT` | `BLOCKED`),
   and a **STOP** for human review before the next slice.
+- **A check owes proof that it can fail.** A slice that introduces a
+  gate, test or check shows it going red with a deliberate break, and
+  quotes that run. A gate only ever seen green is a hypothesis, not a
+  result — and a suite that only calls its own functions proves the
+  functions, not the program, so break the wiring too.
+- **A delivering artifact owes one real result.** Where the artifact's
+  output *is* the product — a dashboard, a report, a query — acceptance
+  quotes one observation it actually returned, or states why it is
+  legitimately empty. "It exists" is not delivery.
 
 ### Gate 5 — Closeout
 - AAR section in the design doc: planned / actual / why the
@@ -88,6 +97,11 @@ sections.
   **Harvesting to the Framework** below.
 - Good analyses produced along the way may be filed as wiki pages
   (with citations) instead of dying in chat history.
+- **Name what this work made false.** Ask it explicitly — which existing
+  statement, in which artifact, does this undertaking now contradict? —
+  and record the answer in the closeout, including when it is "none".
+  Appending is cheap and feels complete; revising an earlier claim costs
+  attention, so it only happens when someone asks the question.
 - Move the design doc to `docs/design/done/`. Run `gen_status.py`.
 
 ## Debugging Path

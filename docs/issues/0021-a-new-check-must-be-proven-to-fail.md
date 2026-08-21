@@ -1,7 +1,7 @@
 ---
 type: issue
 id: "0021"
-status: open
+status: done
 created: 2026-08-20
 related:
   - "docs/sources/feldtest-sustained-operation-2026-08.md"
@@ -23,5 +23,14 @@ once. Proposed as a rule with no schema impact: whoever builds a gate
 breaks it deliberately and shows it going red, and that evidence belongs in
 the slice that introduces it. Gate 4 already asks each slice for evidence -
 this names what evidence a check owes.
+
+**Closed 2026-08-21 (v0.1.3):** Gate 4 in `WORKFLOW.md` now requires a
+slice that introduces a gate to show it going red with a deliberate break
+and to quote that run — including breaking the wiring, because a suite
+that only calls its own functions proves the functions and not the
+program. No schema impact. The harvest that argued for this rule supplied
+its own strongest evidence: its counter-controls exposed two assertions
+that had been passing since the moment they were written and checked
+nothing.
 
 *Evidence: [second hand-back](../../docs/sources/feldtest-sustained-operation-2026-08.md), item 2.*

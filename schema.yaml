@@ -98,6 +98,12 @@ types:
           - requirements
           - faq
           - stolpersteine
+      # Optional, and meaningful on a page that records a recurring failure
+      # class (area: stolpersteine). `harvested` means a released framework
+      # version covers the pattern — handed over is not harvested, and
+      # `harvested_in` names that version (ADR-0009).
+      status: { enum: [open, partly, harvested] }
+      harvested_in: { kind: str }
       sources: { kind: links }
       related: { kind: links }
     rules:

@@ -35,6 +35,14 @@ anything deployed owes deployment and admin.
   or external URLs. Claims that came from a source cite it. Sources are
   immutable; agents read them, never modify them.
 - Standard Markdown links only, diagrams as Mermaid (see [ADR-0003](../adr/0003-portable-markdown.md)).
+- **A recurring failure class is one page in `stolpersteine/`, and it
+  carries a state.** Where an AAR records a single incident and an issue
+  records a single undertaking, a stolpersteine page is where several of
+  them become a pattern — so it is also the queue a harvest reads.
+  `status` is `open`, `partly` or `harvested`, and `harvested_in` names
+  the framework version that covered it. A pattern becomes `harvested`
+  only when a released version covers it: handing it over is not
+  harvesting it. See [ADR-0009](../adr/0009-patterns-as-wiki-pages-with-a-harvest-state.md).
 
 ## Knowledge handling
 

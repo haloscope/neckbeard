@@ -1,6 +1,6 @@
 ---
 type: design
-status: gate-4
+status: done
 date: 2026-08-21
 size: L
 related:
@@ -335,8 +335,151 @@ just written down in it.
 
 ### Slice 3 — 0.2.0: state for patterns, protection for locked artifacts
 
-Recorded on completion.
+- [x] **Decide where a pattern lives** — files:
+  `docs/adr/0009-patterns-as-wiki-pages-with-a-harvest-state.md`,
+  `schema.yaml`, `docs/wiki/index.md` — action: `wiki-page` gains optional
+  `status` and `harvested_in`; the wiki rules state that a recurring
+  failure class is one page and carries a state — verify: `validate.py` —
+  done.
+- [x] **Build the contradictor** — files: `scripts/check_locked.py` —
+  action: refuse an edit to an accepted record or an immutable source,
+  permit exactly the supersede edit, fail closed — verify: `--selftest`,
+  **and each assertion shown to fail when the code it guards is broken** —
+  done.
+- [x] **Wire what can honestly be wired** — files: `.gitlab-ci.yml` —
+  action: the positive control, with the reason the real run is not here —
+  verify: the configuration parses and reads back five steps — done, with
+  the remainder filed as issue 0029.
+- [x] **Rescope what the reading changed** — files: issues 0019, 0022;
+  close 0026 — done.
+
+**Evidence.** `validate: 0 error(s), 0 warning(s)`; `gen_status --check:
+STATUS.md is current`; `check_harvest --selftest: 17 assertions passed`;
+`check_locked --selftest: 11 assertions passed`; `check_locked --range
+v0.1.3..HEAD: no findings` — the new check run against this undertaking's
+own commits; harvest check over the full range with the adopter's term
+list: `no findings — 28 term(s)`.
+
+**The control was controlled** — the rule added in v0.1.3, applied to the
+first check written under it. Nine deliberate breaks, one at a time:
+
+| Break | Failing assertions |
+|---|---|
+| `git()` returns `""` instead of raising | 8 |
+| `was_accepted` always true | 5 |
+| `was_accepted` always false | 1, 10 |
+| supersede exemption always granted | 1, 10 |
+| supersede exemption never granted | 4 |
+| added files under sources treated as edits | 6 |
+| the immutable-sources rule dropped | 2, 7 |
+| `split_range` accepts anything | 9 |
+| every changed path reported (permanently red) | 3, 4, 5, 6, 11 |
+
+Eleven assertions, nine breaks, **zero uncovered**. The exercise paid for
+itself once: it showed that the exemption for the ADR template was
+unreachable — the template carries `status: proposed`, so the accepted
+test already excludes it — and an unreachable branch is a branch no break
+can fail. It was removed rather than given an assertion.
+
+**Status:** `DONE_WITH_CONCERNS` — the mechanism is correct and proven able
+to fail; this repository is not yet guarded by it, because only its control
+is wired into a pipeline nobody here can observe. Filed as issue 0029 with
+what "done" requires.
+
+> **STOP — slice review.** Covered by the owner's release approval of
+> 2026-08-21.
 
 ## Gate 5 — Closeout
 
-Recorded on completion.
+**Planned vs. actual.** Planned: integrate the second harvest as two
+releases. Delivered as planned, in three slices. Against the four
+acceptance criteria:
+
+| # | Criterion | Result |
+|---|---|---|
+| 1 | Every harvest issue resolved, none unaccounted | **met** — nine issues: two closed by rules, one folded, one rejected, two rescoped, one closed by a mechanism, one split and closed, one left open with its trigger |
+| 2 | The framework's own gate runs | **partly met** — the configuration parses and all steps pass locally under the CI interpreter; the pipeline itself was not observed |
+| 3 | Every rule added has a contradictor, or says why not | **met** — three gate rules with a mandatory stop, one mechanism with a script, each stated |
+| 4 | Nothing leaves the machine | **met** — push URL disabled, no push attempted |
+
+**Criterion 2 is the honest one.** Issue 0018 was diagnosed, fixed and
+verified — but verified *locally*. The claim "the pipeline now runs" is
+exactly the unverified positive this repository already has an AAR about,
+so it is not made. What is proven: the configuration parses, and the five
+steps of the `validate` job pass under Python 3.12. What is not: that a
+runner executed them.
+
+**What this work made false** — the Gate-5 question added in this same
+undertaking, asked of itself:
+
+- **Issue 0018's prescribed fix.** It named one place to quote; two are
+  broken, and repairing one silently converts the other into a mapping.
+  Corrected in the issue, with the incomplete version left standing.
+- **The digest's word "without exception."** The audit behind the
+  harvest's central claim rests partly on a drift check that never
+  compares one of the files it vendors — measured: that file differs from
+  its baseline and the check reports zero errors. The claim's substance
+  holds; the absoluteness does not. **Not corrected at the source**:
+  `docs/sources/` is immutable, and as of this release a script enforces
+  that. The qualification lives here instead, which is what the
+  immutability rule is for.
+- **The harvest's second open uncertainty.** "Whether word boundaries miss
+  a real leak inside a compound is untested." Now tested: with a
+  single-word term, boundary matching found one of five occurrences —
+  genitive, plural and both compound positions slipped through. German
+  inflection attaches exactly the characters that destroy a word boundary,
+  and the field's evidence is written in German. The default stays; the
+  list has to carry `*term*` for any name that inflects, and that belongs
+  in the instructions for writing a list.
+- **Nothing else.** `AGENTS.md`, the ADRs and the first digest are
+  unaffected by this undertaking.
+
+**Learnings.**
+
+- **An unreachable branch is a branch no break can fail.** The counter-
+  controls did not find a bug; they found a defensive condition that could
+  never be true. Coverage measured by deliberate breaks tells you which
+  code is load-bearing, which reading it does not.
+- **A finding and a behaviour can arrive in one file, and separating them
+  is most of the work.** Both of the harvest's collapses paired a
+  structural finding with a behavioural one, and each collapse hid the
+  cheaper half of the pair — a one-sentence rule buried under a schema
+  decision, and model failure laundered into a framework gap.
+- **The strongest argument for a mechanism was made by the mechanism.**
+  The harvest check caught its own author writing a real name into the
+  framework's source. The locked check found a dead branch in itself. In
+  both cases the tool was more careful than the person building it, which
+  is the entire case the field report was making.
+- **"Already decided" is a distinct outcome from "not a gap."** Half of
+  0022 was framework law a version before it was proposed. That is not the
+  field being wrong — it is the cost of an adopter running one version
+  behind, and it is an argument for the upgrade path, not against the
+  finding.
+
+**Harvested.** v0.1.3: the pipeline fix, three rules in `WORKFLOW.md`,
+issues 0021, 0024, 0028 closed, 0018 closed and corrected, 0025 folded into
+0012, 0027 rejected, 0023's pointer fixed and its scope narrowed. 0.2.0:
+ADR-0009, the `wiki-page` state fields, `scripts/check_locked.py`, issue
+0026 closed, issues 0019 and 0022 rescoped, issue 0029 opened.
+
+**Open uncertainties** — the calls I am least confident about:
+
+1. **Closing 0027.** A framework can require evidence of outcomes, not of
+   comprehension. If that is too quick, a real gap is now unfiled.
+2. **This repository is not guarded by its own new check.** Issue 0029 says
+   what "done" requires, and until it is done the mechanism protects
+   adopters who wire it and not this repository.
+3. **0.2.0 was scoped to this harvest's structural findings.** Issues
+   0007–0014 remain open with their ADR-0007 trigger. If the release
+   approval meant the full structural harvest, that is the line to correct.
+4. **The AAR of 2026-08-13 still asserts that this repository mirrors
+   outward.** The owner has stated the opposite; the fact of what carried
+   content outward that day is not reconstructable from here and was not
+   guessed. The correction belongs at the head of that AAR, dated, and is
+   blocked on the owner. ADR-0008 needs no supersession: its context says
+   "a mirror token" without attributing the mirror, so the decision and its
+   reasoning both survive the correction.
+
+> **Gate 5 approved by the owner, 2026-08-21** with the release approval.
+> On approval: `status: done`, move to `docs/design/done/`, re-run
+> `gen_status.py`.

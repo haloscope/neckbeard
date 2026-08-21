@@ -1,7 +1,7 @@
 ---
 type: issue
 id: "0018"
-status: open
+status: done
 created: 2026-08-13
 related:
   - "docs/design/done/2026-08-20-second-hand-back-and-harvest-rule.md"
@@ -51,3 +51,28 @@ definition deserves its own deliberate act rather than a drive-by edit.
 **Consequence while it stands:** every step listed in the `validate` job,
 including any added since, is inert. Verification of those steps has to
 happen locally until this is fixed.
+
+## Closed 2026-08-21 (v0.1.3) — and the fix above was incomplete
+
+Fixed by merging `fix/ci-yaml-multiline-push`, which existed unmerged since
+2026-08-17 and repairs **two** places, not the one this issue named.
+
+⚠️ **This supersedes the "Fix:" paragraph above.** That paragraph says to
+quote the argument so the colon sits inside a YAML string — singular.
+Measured on the real file: repairing only the `git push` block makes the
+configuration parse, and the line above it,
+`git commit -m "vendor: update ponytail to ${HASH}"`, then parses as a
+**mapping** instead of a string. No error, no message, a broken step. The
+prescribed fix would have produced a configuration that parses and carries
+a step that cannot run — the "reports success but is blind" class, inside
+the fix for it.
+
+Left standing rather than deleted, for the same reason the wrong `pip
+install` suspicion was left standing: a plausible, incomplete fix is worth
+seeing next to what it missed.
+
+**Evidence.** The configuration parses and the `validate` job reads back
+its steps; `validate.py`, `gen_status.py --check` and both positive
+controls pass under the interpreter the CI declares. The pipeline itself
+has not been observed — see [issue 0029](0029-wire-the-locked-check-into-the-pipeline.md).
+

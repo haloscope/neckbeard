@@ -9,7 +9,7 @@ related:
   - "docs/sources/feldtest-sustained-operation-2026-08.md"
   - "docs/issues/0023-append-only-artifacts-go-stale-at-the-head.md"
   - "docs/adr/0008-harvest-carries-classes-not-adopter-specifics.md"
-  - "docs/design/2026-08-21-integrate-the-second-harvest.md"
+  - "docs/design/done/2026-08-21-integrate-the-second-harvest.md"
 ---
 
 # ADR-0009: Recurring patterns live as wiki pages with a harvest state

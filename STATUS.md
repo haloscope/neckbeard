@@ -31,9 +31,11 @@
 | [0026](docs/issues/0026-locked-artifacts-have-no-mechanical-protection.md) | open | A "binding, never edited" rule in prose has nothing that contradicts an edit |
 | [0027](docs/issues/0027-read-first-produces-no-evidence.md) | open | Gate 2 requires reading the relevant records, and records nothing about it |
 
-## Active design docs (0)
+## Active design docs (1)
 
-_none active_
+| Design | Gate | Title |
+|---|---|---|
+| [2026-08-21-integrate-the-second-harvest](docs/design/2026-08-21-integrate-the-second-harvest.md) | gate-4 | Design: Integrating the second harvest — v0.1.3 and 0.2.0 |
 
 ## ADRs (8)
 

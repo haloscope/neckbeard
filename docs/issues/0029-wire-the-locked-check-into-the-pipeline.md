@@ -39,3 +39,12 @@ An unobserved green is not evidence — that is the rule this framework added
 in v0.1.3, applied to itself.
 
 *Origin: raised while closing [issue 0026](0026-locked-artifacts-have-no-mechanical-protection.md).*
+
+**Updated 2026-08-21:** the first blocker is gone. The `validate` job now
+installs git, because the first pipeline this repository ever produced
+showed both positive controls crashing without it — see
+[the AAR](../aar/2026-08-21-the-parse-was-not-the-run.md). The shallow
+clone and the range variable remain, and so does the requirement above:
+this closes when a real violation has been observed turning a real
+pipeline red.
+

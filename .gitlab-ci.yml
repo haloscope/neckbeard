@@ -4,6 +4,11 @@ validate:
   rules:
     - if: '$CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"'
   script:
+    # Both positive controls build a throwaway git repository, and the slim
+    # image has no git. Without this they crash instead of asserting — which
+    # is what the first observed pipeline showed, the moment the config
+    # parsed for the first time (see docs/aar/2026-08-21-the-parse-was-not-the-run.md).
+    - apt-get update -qq && apt-get install -qq -y --no-install-recommends git >/dev/null
     - pip install --quiet pyyaml
     - python scripts/validate.py
     - python scripts/gen_status.py --check

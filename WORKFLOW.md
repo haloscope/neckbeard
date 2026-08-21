@@ -82,7 +82,9 @@ sections.
   gate, test or check shows it going red with a deliberate break, and
   quotes that run. A gate only ever seen green is a hypothesis, not a
   result — and a suite that only calls its own functions proves the
-  functions, not the program, so break the wiring too.
+  functions, not the program, so break the wiring too. The proof has to
+  come from **where the check actually runs**: a control that passes on a
+  workstation says nothing about the environment it was wired into.
 - **A delivering artifact owes one real result.** Where the artifact's
   output *is* the product — a dashboard, a report, a query — acceptance
   quotes one observation it actually returned, or states why it is

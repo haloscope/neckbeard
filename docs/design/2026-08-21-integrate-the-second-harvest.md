@@ -286,7 +286,52 @@ class, inside the fix for it.
 
 ### Slice 2 — v0.1.3: the rules the evidence carries, and the issues that do not survive
 
-Recorded on completion.
+- [x] **Add the two rules with no schema impact** — files: `WORKFLOW.md` —
+  action: Gate 4 gains the evidence a check owes (0021) and the evidence a
+  delivering artifact owes (0024) — verify: `validate.py` — done.
+- [x] **Split the buried rule out** — files:
+  `docs/issues/0028-closeout-must-name-what-it-refuted.md`, `WORKFLOW.md` —
+  action: the half of the harvest's item 4 that needs no schema becomes its
+  own issue and a Gate-5 counter-question — verify: `validate.py`,
+  `gen_status --check` — done, opened and closed in the same release.
+- [x] **Correct the broken evidence pointer** — files: issue 0023 —
+  action: `items 4 and 6` → `item 4` — verify: the digest's item 6 belongs
+  to issue 0025 — done.
+- [x] **Close what does not survive the reading** — files: issues 0025,
+  0027, 0012 — action: fold 0025's principle into 0012 and close it; close
+  0027 as rejected — verify: `validate.py` — done.
+
+**Evidence.** Under the CI's interpreter (3.12): `validate: 0 error(s), 0
+warning(s)`; `gen_status --check: STATUS.md is current`. Harvest check over
+`main..HEAD` with the adopter's term list: `no findings — 28 term(s)`.
+
+**Criterion 3, answered honestly.** None of the three rules added here has
+a script that contradicts it, and none can have one: they are evidence
+rules about judgement — whether a break was genuine, whether an
+observation is real, which earlier statement a piece of work refuted. A
+script can count that a section exists; it cannot weigh it, and a check
+that counts rituals produces findings nobody can act on, which is issue
+0022's class.
+
+What they do have is the distinction the harvest's own audit actually
+draws. Every rule it found broken was an **always-on rule that nothing
+stops for** — a size class nobody proposed, a completion status nobody
+wrote. Every rule it found kept had something that refused to proceed.
+These three sit at a gate that already ends in a mandatory STOP, so the
+reviewer is the contradictor and is required to be there. That is weaker
+than a script and stronger than prose, and naming which of the three a
+rule has is the part worth carrying forward.
+
+**A note on where the harvest's evidence was strongest.** The rule from
+0021 is the one the harvest proved on itself: its counter-controls found
+two assertions that had passed since the moment they were written and
+guarded nothing. The rule is applied to this undertaking in slice 3, not
+just written down in it.
+
+**Status:** `DONE`
+
+> **STOP — slice review.** Covered by the owner's release approval of
+> 2026-08-21.
 
 ### Slice 3 — 0.2.0: state for patterns, protection for locked artifacts
 

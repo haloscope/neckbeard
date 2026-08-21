@@ -83,3 +83,26 @@ The two links became plain identifiers. Nothing else changed.
   Whether `schema.yaml` and the templates belong there too depends on
   whether adopters are expected to hold them byte-identical — the field
   vendors all of them, but compares only some.
+
+## The fix's own first defect, found the same way
+
+Preparing the vendoring surfaced a second one, in the remedy above. The
+new rule rejected repo-relative links in *the whole* of a vendored file —
+but an adopting project appends its own always-on rules to `AGENTS.md`
+below a marker, and that section legitimately links to its own decision
+records. Measured in the adopter's repository: **eleven** such links.
+
+Shipped as written, a fix for an unfollowable adoption path would have
+made the adoption path unfollowable in a new way, and would have done it
+on the adopter's side where it is most expensive to discover.
+
+The rule now stops at the project-section marker, which `schema.yaml`
+carries as `project_section_marker` so an adopter can set its own. Proven
+both ways: with the marker set correctly the adopter validates clean
+against v0.3.1's files; with the marker deliberately wrong, the same
+eleven links are reported.
+
+The lesson is the one directly above, one iteration later and about my own
+work: **a file that is copied elsewhere must be checked as if it were
+already elsewhere.** Reading the rule did not reveal this. Attempting the
+copy did, twice in one hour.

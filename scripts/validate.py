@@ -156,7 +156,7 @@ def check_body_links(path: Path, body: str, root: Path, inbound: set) -> None:
             inbound.add(target)
 
 
-def check_vendored_portable(root: Path, vendored: list) -> None:
+def check_vendored_portable(root: Path, vendored: list, marker: str) -> None:
     """Files adopters hold byte-identical must carry no repo-relative link.
 
     They are copied into repositories without this repo's docs/, so such a
@@ -169,6 +169,10 @@ def check_vendored_portable(root: Path, vendored: list) -> None:
         if not path.is_file():
             continue
         body = path.read_text(encoding="utf-8")
+        if marker and marker in body:
+            # Everything below the marker is the adopting project's own
+            # section: never copied elsewhere, so its links are fine.
+            body = body.split(marker, 1)[0]
         body = re.sub(r"```.*?```", "", body, flags=re.S)
         body = re.sub(r"`[^`\n]*`", "", body)
         for link in (m.group(1) for m in INLINE_LINK_RE.finditer(body)):
@@ -197,7 +201,8 @@ def main() -> int:
     inbound: set = set()
     wiki_pages: list[tuple[Path, dict]] = []
 
-    check_vendored_portable(root, schema.get("vendored", []))
+    check_vendored_portable(root, schema.get("vendored", []),
+                            schema.get("project_section_marker", ""))
 
     # Root documents: inline links must resolve; no frontmatter required.
     for rel in schema.get("scope", {}).get("link_only", []):

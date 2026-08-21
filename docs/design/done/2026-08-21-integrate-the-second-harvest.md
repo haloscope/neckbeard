@@ -418,8 +418,25 @@ undertaking, asked of itself:
 - **The digest's word "without exception."** The audit behind the
   harvest's central claim rests partly on a drift check that never
   compares one of the files it vendors — measured: that file differs from
-  its baseline and the check reports zero errors. The claim's substance
-  holds; the absoluteness does not. **Not corrected at the source**:
+  its baseline and the check reports zero errors.
+
+  ⚠️ *Corrected 2026-08-21, after actually attempting the upgrade.* This
+  was too strong in one respect and is left standing with the correction
+  beside it rather than quietly softened. The check is **not** silently
+  blind: the adopter's baseline carries a provenance table that names
+  exactly which files are compared byte-for-byte and which are "erklärt
+  projekterweitert — nur Diff-Referenz", and the check's own pair list
+  matches that table item for item. Three files are outside the rule by
+  declaration, not by oversight, and the extension is documented a second
+  time in the head of the adopter's schema.
+
+  What survives: those three carry no ADR, which the adopter's own rule
+  requires of every permanent exception; and nothing tells them when
+  upstream changes one — the v0.1.1 → v0.3.1 reconciliation had to be
+  done by hand. The absoluteness of "without exception" still does not
+  hold, but the reason is a declared scope, not a hole.
+
+  **Not corrected at the source**:
   `docs/sources/` is immutable, and as of this release a script enforces
   that. The qualification lives here instead, which is what the
   immutability rule is for.

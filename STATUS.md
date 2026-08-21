@@ -43,8 +43,9 @@ _none active_
 | [0009](docs/adr/0009-patterns-as-wiki-pages-with-a-harvest-state.md) | accepted | ADR-0009: Recurring patterns live as wiki pages with a harvest state |
 | [0010](docs/adr/0010-judge-reads-traces-not-behaviour.md) | accepted | ADR-0010: A judge reads traces, so every rule owes one |
 
-## Open AARs (3)
+## Open AARs (4)
 
 - [AAR: Neckbeard v1 — creation session (chat, 2026-08-09)](docs/aar/2026-08-09-neckbeard-v1-creation.md)
 - [AAR: Hand-back near-leak — an unverified negative, asserted as fact](docs/aar/2026-08-13-hand-back-near-leak.md)
+- [AAR: An adoption path that could not be followed, for three releases](docs/aar/2026-08-21-an-adoption-path-that-could-not-be-followed.md)
 - [AAR: The parse was not the run — two positive controls that had never executed](docs/aar/2026-08-21-the-parse-was-not-the-run.md)

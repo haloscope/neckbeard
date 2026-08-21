@@ -8,7 +8,12 @@ related: []             # issues, ADRs spawned or read
 
 <!-- Copy to docs/design/YYYY-MM-DD-slug.md. Delete comments when filling in.
      Fill ONE gate at a time; each gate ends with STOP — do not pre-fill
-     later gates. Advance `status` only after human approval. -->
+     later gates. Advance `status` only after human approval.
+
+     The run also owes a ledger under docs/ledger/ — a row per gate with
+     its commit, its approval and its status, plus the reuse-ladder walk.
+     This document is the reasoning; the ledger is the trace, and
+     scripts/judge.py reads the ledger, not this. -->
 
 # Design: Title
 
@@ -72,7 +77,18 @@ linked. None is a valid answer. -->
 <!-- Slice 1 is the tracer bullet: thin end-to-end, runs with mocks.
      Then real logic, one testable slice at a time. Per task:
      files / action / verify / done. After each slice: evidence,
-     status, STOP. -->
+     status, STOP.
+
+     Two kinds of evidence have a named shape (WORKFLOW.md, Gate 4):
+
+     * A slice that introduces a gate, test or check SHOWS IT GOING RED
+       with a deliberate break, and quotes that run — from where the check
+       actually runs, not from a workstation. Break the wiring too: a
+       suite that only calls its own functions proves the functions, not
+       the program.
+     * Where the artifact's output IS the product — a dashboard, a report,
+       a query — quote one observation it actually returned, or say why it
+       is legitimately empty. "It exists" is not delivery. -->
 
 ### Slice 1 — Tracer bullet
 - [ ] Task: … — files: … — action: … — verify: … — done: …
@@ -97,6 +113,11 @@ linked. None is a valid answer. -->
 **Planned vs. actual.** <!-- What was planned, what happened. -->
 
 **Why the difference.** <!-- Root causes, honestly. -->
+
+**What this made false.** <!-- Which existing statement, in which
+artifact, does this undertaking now contradict? Answer it even when the
+answer is "none". Appending is cheap and feels complete; revising an
+earlier claim costs attention, so it only happens when someone asks. -->
 
 **Learnings.** <!-- What future-you should know. -->
 

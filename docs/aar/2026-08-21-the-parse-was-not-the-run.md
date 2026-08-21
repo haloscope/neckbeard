@@ -81,6 +81,23 @@ and this repository has now produced its own instance of it.
   sounds.** The interpreter matched. The image did not, and nothing in the
   local run could have revealed that.
 
+## Resolution, observed
+
+The fix was pushed and the pipeline watched rather than assumed. The
+first green pipeline in this repository's history:
+
+```
+validate: 0 error(s), 0 warning(s)
+gen_status --check: STATUS.md is current
+selftest: 17 assertions passed      (harvest check)
+selftest: 11 assertions passed      (locked check)
+Job succeeded                        — 11.1s
+```
+
+Twenty-eight assertions had been declared verified for two releases
+without ever having executed in the environment they were wired into.
+They execute now, and they pass.
+
 ## Open
 
 - The real (non-selftest) run of `check_locked.py` is still not wired;

@@ -28,6 +28,14 @@ vendored:
   - "AGENTS.md"
   - "WORKFLOW.md"
   - "CLAUDE.md"
+  # The templates are copied byte-for-byte too, and are read in a repo
+  # that has none of this one's artifacts. Same rule, same reason.
+  - "docs/adr/template.md"
+  - "docs/design/template.md"
+  - "docs/aar/template.md"
+  - "docs/issues/template.md"
+  - "docs/ledger/template.md"
+  - "docs/verdict/template.md"
 
 # An adopting project appends its own always-on rules below a marker in a
 # vendored file (AGENTS.md §5). Everything from the marker on belongs to

@@ -18,6 +18,12 @@ Obsidian vault, validated deterministically by scripts. Rules live in
 learnings live in AARs — and the framework documents itself with its
 own artifacts.
 
+Its working assumption: **a rule that leaves no trace cannot be checked
+by anyone, so it is decoration.** Every rule therefore either has a script
+that contradicts it, or it says out loud that it has none. A run leaves a
+ledger; `scripts/judge.py` reads it back against the workflow, and
+`judge.py --coverage` reports which rules are observable at all.
+
 ## How work flows
 
 ```mermaid
@@ -65,6 +71,12 @@ graph LR
     ISS --> STATUS[STATUS.md<br/>generated overview]
     DES --> STATUS
     ADR --> STATUS
+    DES -- every gate --> LED[docs/ledger/<br/>one trace per run]
+    LED --> JUDGE{{scripts/judge.py<br/>trace vs. workflow}}
+    GIT[(git history)] --> JUDGE
+    JUDGE --> VER[docs/verdict/<br/>model failure vs.<br/>framework gap]
+    SCHEMA -.-> LED
+    SCHEMA -.-> VER
 ```
 
 Read direction: issues start work, design docs carry it through the
@@ -72,23 +84,49 @@ gates, lasting decisions become ADRs, learnings become AARs, and AARs
 are harvested into the wiki — with original sources preserved and
 cited. `STATUS.md` is generated from frontmatter; never edit it by hand.
 
+The lower path is the framework checking itself. A run writes a **ledger**
+— a row per gate carrying its commit, its approval and its status, plus
+the walk of the reuse ladder. `judge.py` reads that against `WORKFLOW.md`
+*and against git*, which is the only part of the trace its own author did
+not write. What no script can weigh — is a design doc real or filler —
+goes to a second judge that runs in fresh context and files a **verdict**.
+See ADR-0010.
+
 ## Adopting this in a new project
 
-1. Copy everything **except** `PROJECT.md` into the new repo
-   (there is deliberately none in this template — its absence is what
-   triggers Gate 0 in your project). Also vendor the copied originals
-   unchanged under `docs/sources/upstream/<version>/` — they are the
-   byte-compare baseline that keeps agents from silently rewriting the
-   framework files (see AGENTS.md, Artifact Rules).
-2. Start your agent. Its first action must be the Gate 0 questions;
+1. **Copy everything except `PROJECT.md`.** Its absence is what triggers
+   Gate 0 in your project, so there is deliberately none here.
+2. **Vendor the same files unchanged** under
+   `docs/sources/upstream/<version>/`. That is the byte-compare baseline
+   which keeps agents from silently rewriting the framework files. Write
+   a short provenance note beside it saying which upstream commit it came
+   from, and — this is the part that bites later — **which of your files
+   are held byte-identical and which are deliberately extended.** A
+   vendored file in neither list is compared by nothing.
+3. **Set your project-section marker.** Your own always-on rules go into a
+   marked section *appended below* the upstream content of `AGENTS.md`,
+   never woven into it. Put your marker in `schema.yaml` as
+   `project_section_marker` — `validate.py` uses it to know where the
+   upstream part ends, and your own section may then link freely.
+4. **Start your agent.** Its first action must be the Gate 0 questions;
    the answers become your `PROJECT.md`.
-3. Work. For anything non-trivial the agent proposes a size class and
-   follows `WORKFLOW.md`. Your own always-on rules go into a marked
-   project section appended below the upstream content of `AGENTS.md`,
-   never woven into it — the upstream part stays diffable against your
-   vendored baseline.
-4. Wire CI: run `scripts/validate.py` and `scripts/gen_status.py`
-   on every push (see `.gitlab-ci.yml` once present).
+5. **Wire CI.** On every push: `validate.py`, `gen_status.py --check`,
+   your byte-compare against the baseline, and the positive control of
+   every check you copied — `check_harvest.py --selftest`,
+   `check_locked.py --selftest`, `judge.py --selftest`. Those controls
+   build a throwaway git repository, so the job's image needs `git`.
+   `check_locked.py`'s real run additionally needs unshallow history and
+   a base commit to compare against.
+6. **Work.** For anything non-trivial the agent proposes a size class,
+   follows `WORKFLOW.md`, and writes a ledger under `docs/ledger/`.
+
+⚠️ **Upgrading later is a deliberate act, not a copy.** Replace baseline
+and working copies in one commit; reconcile by hand any file you declared
+extended, because nothing compares those for you; and check that the
+byte-identical ones still are. The first real upgrade of the first adopter
+found this path broken at step one — see
+`docs/aar/2026-08-21-an-adoption-path-that-could-not-be-followed.md`. It is
+described here because it has now actually been walked.
 
 ## Repository layout
 
@@ -104,7 +142,9 @@ cited. `STATUS.md` is generated from frontmatter; never edit it by hand.
 | `docs/issues/` | In-repo issues, status in frontmatter |
 | `docs/wiki/` | Wiki areas as folders, created on demand |
 | `docs/sources/` | Immutable original sources, cited by wiki pages |
-| `scripts/` | Deterministic tooling (validation, status generation) |
+| `docs/ledger/` | One trace per run: a row per gate, plus the reuse-ladder walk |
+| `docs/verdict/` | Judged runs — findings split into model failure vs. framework gap |
+| `scripts/` | Deterministic tooling: `validate.py`, `gen_status.py`, and the check family — `check_harvest.py`, `check_locked.py`, `judge.py`, each with a built-in positive control |
 
 
 ## Influences & prior art
@@ -127,6 +167,18 @@ agents, plus ideas deliberately taken (and credited) from:
 ## Why it is built this way
 
 The reasoning is recorded where this framework says reasoning belongs:
-in its own ADRs. Start with `docs/adr/0001` (canonical AGENTS.md),
-`0002` (in-repo issues), `0003` (portable Markdown), and `0004`
-(schema-first validation and its growth stages), and `0005` (MIT license).
+in its own ADRs.
+
+**Start here:** `0001` canonical AGENTS.md · `0002` in-repo issues ·
+`0003` portable Markdown · `0004` schema-first validation and its growth
+stages · `0005` MIT license.
+
+**Then the ones the field wrote:** `0006` versioning and release tags ·
+`0007` release cadence — corrections now, structural harvest after
+stage-2 evidence · `0008` a harvest carries failure classes, never adopter
+specifics · `0009` recurring patterns live as wiki pages with a harvest
+state · `0010` a judge reads traces, so every rule owes one.
+
+Numbers 0007 through 0010 exist because a real project adopted this and
+handed back what wore out. That is the intended direction of travel, and
+`WORKFLOW.md`'s *Harvesting to the Framework* is the rule for it.

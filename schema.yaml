@@ -23,7 +23,7 @@ scope:
 # http://, https:// or mailto: are treated as external and only
 # format-checked; everything else must be a repo-root-relative path
 # to an existing file.
-link_fields: [related, sources, supersedes, superseded_by]
+link_fields: [related, sources, supersedes, superseded_by, judged]
 
 types:
   project:
@@ -81,6 +81,32 @@ types:
       id: { pattern: "^\\d{4}$" }
       status: { enum: [open, in-progress, done, rejected] }
       created: { kind: date }
+      related: { kind: links }
+
+  # One per session. The envelope is validated here; the gate rows and
+  # ladder entries in the body are outside what this engine can express
+  # (it has no notion of a list of records) and belong to scripts/judge.py.
+  # That seam is deliberate — see ADR-0010.
+  ledger:
+    dir: "docs/ledger"
+    filename: "^\\d{4}-\\d{2}-\\d{2}-[a-z0-9-]+\\.md$"
+    required: [type, date, size, status]
+    fields:
+      date: { kind: date }
+      size: { enum: [S, M, L] }
+      status: { enum: [open, closed] }
+      related: { kind: links }
+
+  # The output of a judged run. Categories are the two-bucket
+  # classification the harvest assessment established: a finding is either
+  # the model not following a clear rule, or a gap in the framework.
+  verdict:
+    dir: "docs/verdict"
+    filename: "^\\d{4}-\\d{2}-\\d{2}-[a-z0-9-]+\\.md$"
+    required: [type, date, outcome, judged]
+    fields:
+      date: { kind: date }
+      outcome: { enum: [clean, model-failure, framework-gap, both] }
       related: { kind: links }
 
   wiki-page:

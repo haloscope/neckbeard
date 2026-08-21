@@ -60,3 +60,22 @@ owes, or test whether the gate thresholds are cut too tightly for daily
 operation.
 
 *Evidence: [second hand-back](../../docs/sources/feldtest-sustained-operation-2026-08.md), the section "The finding that explains most of the others".*
+
+**Half answered 2026-08-21 (ADR-0010).** This issue says an adopting
+project cannot add enforcement where the unenforced rules live. True, and
+it was incomplete: an adopter could not add **observability** there either,
+and that is the half that had to come from here.
+
+Rules now leave a trace — a session ledger with a row per gate, and the
+reuse ladder writing down what it searched, what it found and the outcome.
+`scripts/judge.py --coverage` measures the result: **14 of 23 rules are
+observable, up from 8.** The nine that remain are named, which is new; they
+were previously indistinguishable from rules that were being followed.
+
+⚠️ **The enforcement half stands and this issue stays open.** Observability
+is the precondition, not the answer: a rule that leaves a trace can now be
+contradicted, but nothing yet contradicts most of them, and the judgement
+rules this issue is really about — "is this the simplest solution" — still
+cannot be weighed by any script. What changed is that the framework can now
+say which rules those are instead of guessing.
+

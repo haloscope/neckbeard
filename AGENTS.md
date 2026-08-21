@@ -26,7 +26,10 @@ use judgment — but say so.
 - Before writing new code, stop at the first rung that holds:
   needed at all? → codebase already has it? → stdlib? → platform-native?
   → installed dependency? → one line? → only then: the minimum that works.
-  (Ladder after ponytail, MIT.)
+  (Ladder after ponytail, MIT.) **Name the rung that holds, and record the
+  walk in the run's ledger** — searched, found, outcome. A rung that held
+  and a rung never tried leave the same diff, so without the record this
+  rule cannot be followed observably. See `WORKFLOW.md`, The Run Ledger.
 - Never cut, at any rung: trust-boundary validation, data-loss handling,
   security, accessibility.
 - Lazy about the solution, never about reading the code first.
@@ -93,7 +96,9 @@ explicitly grants that exception.
 | `docs/issues/` | In-repo issues, one file each; status lives in frontmatter |
 | `docs/wiki/` | Wiki areas as folders, created on demand — rules in `docs/wiki/index.md` |
 | `docs/sources/` | Immutable original sources; wiki pages cite them — read-only for agents |
-| `scripts/` | Deterministic tooling: `validate.py`, `gen_status.py` |
+| `docs/ledger/` | One trace per session: a row per gate, plus the ladder walk |
+| `docs/verdict/` | Judged runs; findings split into model failure vs framework gap |
+| `scripts/` | Deterministic tooling: `validate.py`, `gen_status.py`, the check family |
 
 Before proposing options (Gate 2), read the relevant ADRs and AARs first —
 past decisions and learnings are input, not trivia.

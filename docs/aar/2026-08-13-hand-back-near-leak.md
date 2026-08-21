@@ -8,6 +8,39 @@ related:
 
 # AAR: Hand-back near-leak — an unverified negative, asserted as fact
 
+> ⚠️ **Corrected 2026-08-21 by the owner, and the correction reverses the
+> central claim below.** This repository does **not** mirror outward. The
+> outward mirror belongs to the adopting project, whose own oldest decision
+> record scopes push-mirroring to that project's repository group; this
+> repository sits in a different group and was never covered by it. The
+> sentence "this repo does mirror outward" in *What happened* is wrong, and
+> so is reading the expired token as the only thing that stopped
+> propagation from here.
+>
+> What actually travelled was **the session's own identity — the name and
+> address configured for its commits — carried into this repository without
+> anyone deciding it should be.** Measured on 2026-08-21: that address
+> appears in commit metadata only, in no file and in no commit message. It
+> was carelessness, not propagation, and it has no place in the framework's
+> onward development.
+>
+> Corrected at the head rather than rewritten, per the rule this framework
+> added in v0.1.3: an append-only record is contradicted where the reader
+> meets it, not silently edited. The account below stands as written.
+>
+> **What survives the correction, unchanged:** the failure class this AAR
+> is named for. An unverifiable negative was asserted as fact, and the
+> assertion happened to be wrong in *both* directions — the session claimed
+> there was no mirror, then a mirror was assumed to be here. Neither was
+> measured. That is the lesson, and it is the reason
+> [ADR-0008](../adr/0008-harvest-carries-classes-not-adopter-specifics.md)
+> needs no replacement: its decision never depended on whose mirror it was,
+> and its context says "a mirror token" without attributing one.
+>
+> Still open and unchanged: identity is a repository-wide property that no
+> harvest check looks at by design, and what to do about it here is
+> [issue 0017](../issues/0017-pre-publication-review.md), point 4.
+
 ## What was planned / expected
 
 Push the field-test hand-back (source document, ADR-0007, issues) to
@@ -62,3 +95,27 @@ field test itself had documented this exact failure class twice
 - Old objects remain on the origin server until housekeeping/GC.
 - This repo's pipelines have been red since v0.1.1 (all five runs,
   including the hand-back pushes) — filed as issue 0018.
+
+## Appended 2026-08-21: the reachability of the adopter's mirror, confirmed
+
+The correction at the head of this record establishes that the outward
+mirror belongs to the adopting project. The owner has since stated its
+reachability, which is the part that decides whether
+[ADR-0008](../adr/0008-harvest-carries-classes-not-adopter-specifics.md)
+rests on a sound premise:
+
+**The mirror target is access-restricted** — reachable only from inside the
+cluster it runs in and from one known address. It is not open to the
+internet.
+
+That confirms ADR-0008's premise rather than undermining it: the adopter's
+full record — real names, hosts, and the findings register the harvest is
+drawn from — genuinely does stay private, so a generalized digest is the
+only form in which any of it reaches this repository. No superseding
+decision is needed.
+
+Recorded here rather than left in a conversation, because the question
+"is the private record actually private?" is the one an ADR about crossing
+a trust boundary stands or falls on, and the next reader should not have to
+ask it again.
+

@@ -76,3 +76,15 @@ its steps; `validate.py`, `gen_status.py --check` and both positive
 controls pass under the interpreter the CI declares. The pipeline itself
 has not been observed — see [issue 0029](0029-wire-the-locked-check-into-the-pipeline.md).
 
+**Observed 2026-08-21, and it corrects the line above.** The closing
+evidence said "the pipeline itself has not been observed". It has been
+now, and observing it found a second defect: the job's image had no git,
+so both positive controls crashed instead of asserting. Fixed, and the
+pipeline is green — `validate: 0 errors`, STATUS current, 17 + 11
+assertions passing, eleven seconds.
+
+This issue's own subject is therefore fully discharged rather than
+plausibly discharged: the configuration parses **and** the job runs. See
+[the AAR](../aar/2026-08-21-the-parse-was-not-the-run.md) for why the
+first claim was too weak, twice in a row.
+

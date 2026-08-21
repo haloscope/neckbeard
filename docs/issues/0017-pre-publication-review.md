@@ -51,3 +51,41 @@ issue. Separately, the adopter's repository name gave way to the role term
 the digests already use — not because it leaked, but so that the framework
 carries one word per concept instead of two. Nothing about the gate itself
 changed.*
+
+## Appended 2026-08-21: point 4 is now the sharp one, and it is measured
+
+The owner settled the disputed fact behind the near-leak AAR: this
+repository does not mirror outward, and what travelled on 2026-08-13 was
+the session's own commit identity, carried in without a decision.
+
+Measured across the repository on the same day, so the gate has numbers
+instead of an impression:
+
+- **The address appears in commit metadata only** — every commit of this
+  repository carries it as author and committer. It is in no file, no
+  commit message and no generated artifact.
+- **The name appears in three places in content**: the `LICENSE` copyright
+  line, the creation AAR (four mentions), and — as a class of noun rather
+  than as this name — the discussion of word-boundary matching in the
+  harvest check and the design doc that produced it.
+- The name in `LICENSE` is a **decision** (creation AAR, action 5: the name
+  was chosen over the pending pseudonym). The address in commit metadata is
+  **not** a decision; it is the session's git configuration, and the owner
+  has stated it has no place in the framework's onward development.
+
+That distinction is what makes point 4 decidable now. It splits into two
+questions with very different costs:
+
+1. **Forward-only** — set a canonical author identity for this repository
+   so no further commit carries a personal address. Costs one
+   configuration change and decides nothing about what already exists.
+2. **What exists already** — the address is in every commit on `origin`
+   from v0.1.0 onward. Changing that is a history rewrite of published
+   history, and owes an old-to-new mapping (the field project's binding
+   constraint, and [issue 0015](0015-commit-time-anonymisation-here.md)'s
+   subject as well). Nothing here does that.
+
+The pseudonym question from the creation AAR is unchanged and remains the
+owner's: a canonical identity has to be *chosen*, and it is not a technical
+detail.
+

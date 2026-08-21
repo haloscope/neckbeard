@@ -7,6 +7,15 @@ validate:
     - pip install --quiet pyyaml
     - python scripts/validate.py
     - python scripts/gen_status.py --check
+    # The harvest check cannot run here — there is no adopter term list in
+    # this repo, by design (ADR-0008). Its positive control can, and must:
+    # adopters copy this script, so a broken one would ship silently.
+    - python scripts/check_harvest.py --selftest
+    # check_locked's real run needs git in the image and unshallow history,
+    # neither of which this job has. Wiring that is issue 0029 — a deliberate
+    # change with its own verification, not a drive-by. Its positive control
+    # runs here for the same reason the harvest check's does.
+    - python scripts/check_locked.py --selftest
 
 # Manual vendor refresh for the with-ponytail branch.
 # Appears as a play button only in pipelines of that branch.
@@ -31,10 +40,11 @@ vendor-update:
     - BR="vendor/ponytail-update-${HASH}"
     - git checkout -b "$BR"
     - git add -A
-    - git commit -m "vendor: update ponytail to ${HASH}"
-    - git push "https://oauth2:${VENDOR_PUSH_TOKEN}@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git"
-        "HEAD:refs/heads/${BR}"
-        -o merge_request.create
-        -o merge_request.target=with-ponytail
-        -o merge_request.title="vendor: update ponytail to ${HASH}"
-        -o merge_request.remove_source_branch
+    - 'git commit -m "vendor: update ponytail to ${HASH}"'
+    - >
+      git push "https://oauth2:${VENDOR_PUSH_TOKEN}@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git"
+      "HEAD:refs/heads/${BR}"
+      -o merge_request.create
+      -o merge_request.target=with-ponytail
+      -o merge_request.title="vendor: update ponytail to ${HASH}"
+      -o merge_request.remove_source_branch

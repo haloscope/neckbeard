@@ -78,15 +78,30 @@ sections.
 - Each slice ends with verification evidence, a status
   (`DONE` | `DONE_WITH_CONCERNS` | `NEEDS_CONTEXT` | `BLOCKED`),
   and a **STOP** for human review before the next slice.
+- **A check owes proof that it can fail.** A slice that introduces a
+  gate, test or check shows it going red with a deliberate break, and
+  quotes that run. A gate only ever seen green is a hypothesis, not a
+  result — and a suite that only calls its own functions proves the
+  functions, not the program, so break the wiring too.
+- **A delivering artifact owes one real result.** Where the artifact's
+  output *is* the product — a dashboard, a report, a query — acceptance
+  quotes one observation it actually returned, or states why it is
+  legitimately empty. "It exists" is not delivery.
 
 ### Gate 5 — Closeout
 - AAR section in the design doc: planned / actual / why the
   difference / learnings.
 - Harvest: learnings useful to future readers go to the wiki
   (FAQ, Stolpersteine) with source links. A missing or wrong framework
-  rule becomes a framework issue or update.
+  rule becomes a framework issue or update — generalized first, per
+  **Harvesting to the Framework** below.
 - Good analyses produced along the way may be filed as wiki pages
   (with citations) instead of dying in chat history.
+- **Name what this work made false.** Ask it explicitly — which existing
+  statement, in which artifact, does this undertaking now contradict? —
+  and record the answer in the closeout, including when it is "none".
+  Appending is cheap and feels complete; revising an earlier claim costs
+  attention, so it only happens when someone asks the question.
 - Move the design doc to `docs/design/done/`. Run `gen_status.py`.
 
 ## Debugging Path
@@ -121,11 +136,43 @@ A recurring, human-triggered ritual. Agenda:
    last time.
 2. Backlog triage over `docs/issues/`: close, reprioritize, split.
 3. AAR harvest: walk recent AARs; update the wiki (FAQ, Stolpersteine);
-   propose framework changes.
+   propose framework changes — generalized per **Harvesting to the
+   Framework** below.
 4. Wiki lint (content-level, beyond `validate.py`): contradictions
    between pages, claims superseded by newer sources, orphan pages,
    missing cross-references, gaps worth a new page or a web search.
 5. STATUS review: anything stale or surprising in `STATUS.md`.
+
+## Harvesting to the Framework
+
+A harvest is the one artifact that leaves the project: findings travel
+from an adopting repo back into the framework so the next version can
+cover them. It crosses a trust boundary, and it is written by the people
+least likely to notice what is specific about their own project.
+
+- **What travels:** the failure class, its effect, its cause, and the
+  framework change it argues for.
+- **What never travels:** names of the adopter, its products, domains or
+  customers; hostnames, URLs and paths; stack components; people; commit
+  hashes; the adopter's own issue and ticket identifiers. Refer to
+  evidence by an identifier that resolves only in the private record, and
+  use roles instead of names — "a steering repo for a multi-component
+  group", never the group.
+- **Before it leaves:** run `scripts/check_harvest.py` over the range
+  being handed over. It reads file contents, file names and commit
+  messages, and fails closed: a missing term list or an unresolvable range
+  is an error, never a pass.
+- **The term list belongs to the adopter** and is never committed to the
+  framework — the framework must not store the names it exists to keep
+  out. A term the framework itself uses is shared vocabulary, not a
+  secret; listing it only produces noise that teaches people to skip the
+  check.
+
+⚠️ The check supplements review, it never replaces it: a denylist finds
+only the nouns somebody thought of, and it deliberately does not look at
+commit identity. Read the diff as well.
+
+Binding rule: [ADR-0008](docs/adr/0008-harvest-carries-classes-not-adopter-specifics.md).
 
 ## Knowledge Handling (summary)
 

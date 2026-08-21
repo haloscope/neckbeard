@@ -84,11 +84,17 @@ without marketplace access. Refresh via `scripts/vendor-ponytail.sh`.
 
 1. Copy everything **except** `PROJECT.md` into the new repo
    (there is deliberately none in this template — its absence is what
-   triggers Gate 0 in your project).
+   triggers Gate 0 in your project). Also vendor the copied originals
+   unchanged under `docs/sources/upstream/<version>/` — they are the
+   byte-compare baseline that keeps agents from silently rewriting the
+   framework files (see AGENTS.md, Artifact Rules).
 2. Start your agent. Its first action must be the Gate 0 questions;
    the answers become your `PROJECT.md`.
 3. Work. For anything non-trivial the agent proposes a size class and
-   follows `WORKFLOW.md`.
+   follows `WORKFLOW.md`. Your own always-on rules go into a marked
+   project section appended below the upstream content of `AGENTS.md`,
+   never woven into it — the upstream part stays diffable against your
+   vendored baseline.
 4. Wire CI: run `scripts/validate.py` and `scripts/gen_status.py`
    on every push (see `.gitlab-ci.yml` once present).
 

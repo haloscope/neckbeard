@@ -130,6 +130,83 @@ For bugs and incidents, any size:
 - End every working session by answering: "Which choices did I make that
   I'm least confident about?" File the answer in the design doc.
 
+## The Run Ledger
+
+A rule that leaves no trace cannot be checked by anyone — not a reviewer,
+not a script, not a later reader. Following it and ignoring it produce the
+same repository. **Every rule therefore owes a trace, or it is
+decoration.**
+
+The trace of a run is one file in `docs/ledger/`, one per session, with a
+row per gate:
+
+- **`gate`** — the gate number, or the slice for size M.
+- **`commit`** — the commit that closed it. A commit, not a timestamp: a
+  timestamp is written by the same hand as the claim, a commit is not.
+- **`approval`** — who released the gate. Empty means the next gate began
+  without a stop.
+- **`status`** — one of `DONE` | `DONE_WITH_CONCERNS` | `NEEDS_CONTEXT` |
+  `BLOCKED`.
+- **`note`** — one line, for a reader.
+
+A second table records the **ladder walk** (`AGENTS.md` §1): what was
+searched, what was found, and an outcome that begins `reused:` or
+`built:`. The section is mandatory even when nothing new was built — a
+session that built nothing says so in a row, because an absent record and
+an ignored rule look identical.
+
+`scripts/judge.py` reads the ledger against these rules and against git.
+`scripts/judge.py --coverage` reports which rules of this framework are
+observable at all; a rule at zero is either unobservable or inert, and
+both are worth knowing. That report is never a gate.
+
+## Judging a Run
+
+Two judges, and they answer different questions.
+
+**The deterministic one** is `scripts/judge.py`: gate order, gates owed by
+the declared size class, approvals, the status vocabulary, and the
+cross-checks against git — that every named commit exists, is reachable,
+and that the commits run in the same order as the gates claim. That last
+group is the only part measured against evidence the ledger's author did
+not write.
+
+**The inferential one** is a ritual, not a script, because no script can
+tell a real design document from a plausible one. It is invoked as a
+skill or slash command, and its one binding condition is where it runs:
+
+> ⚠️ **Fresh context, and without the work transcript.** An agent that
+> judges its own session justifies rather than checks. The judge receives
+> `AGENTS.md`, `WORKFLOW.md`, the diff and the ledger — and nothing else.
+> This is a condition, not an optimisation; run in the same context the
+> output is worthless.
+
+Its rubric, five questions, each answered with a quotation from the diff
+or the ledger rather than an impression:
+
+1. **Scope.** Does every changed file trace to the stated undertaking?
+   Name any that does not.
+2. **Substance.** Is the design document load-bearing — do its non-goals
+   exclude something a reader would otherwise expect, and are the shakiest
+   calls real risks rather than modesty?
+3. **Size.** Was the declared class plausible for what the diff turned out
+   to be? A size that fits only in hindsight is the finding.
+4. **Evidence.** Where a slice claims a result, is a run quoted? Where a
+   check was added, was it shown going red?
+5. **Silence.** Which rule *should* have produced a trace here and did
+   not?
+
+The output is a `verdict` artifact under `docs/verdict/`, and every
+finding is classified into one of two buckets: **model failure** — a clear
+rule was not followed — or **framework gap** — the rule is missing,
+unenforceable, or invisible. Keeping those apart is the whole point; a
+finding in the wrong bucket either blames a person for a missing rule or
+writes a behavioural lapse into the rule set. Binding rule:
+[ADR-0010](docs/adr/0010-judge-reads-traces-not-behaviour.md).
+
+⚠️ The ledger is written by the agent it describes and can be wrong. The
+threat model is drift, not sabotage — see the ADR.
+
 ## Refinement Session
 
 A recurring, human-triggered ritual. Agenda:
